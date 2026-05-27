@@ -18,6 +18,7 @@ func main() {
 		log.Fatal("Invalid operation, try again.")
 	}
 
+
 	switch args[1] {
 	case "Init", "init":
 		cmd.Init()
