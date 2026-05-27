@@ -6,5 +6,5 @@ package main
 import "github.com/Alvesafk/gopass/cmd"
 
 func main() {
-	cmd.Execute()
+
 }
