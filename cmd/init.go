@@ -4,29 +4,55 @@ import (
 	"fmt"
 	"log"
 	"os"
+
+	"github.com/Alvesafk/gopass/format"
+	"github.com/Alvesafk/agosh/utils"
 )
 
 var (
-	user_home = getUserHomeDir()
+	user_home = utils.GetUserHomeDir()
 	config_path = user_home + "/.config/gopass"
+	secrets_path = config_path + "/secrets.json"
 )
 
 func Init() {
-	fmt.Printf("\033[1m\033[32mInitiating, checking if config dir already exists.\033[0m\n")
+	fmt.Print(format.Green("Initiating, checking if config dir already exists.", "bold", 1))
 	if fileExists(config_path) {
-		fmt.Printf("\033[1m\033[32mFile already exists!\033[0m\n")
-		return
+		fmt.Print(format.Green("Dir already exists!", "bold", 1))
+
+		if fileExists(secrets_path) {
+			return
+		} else {
+			fmt.Print(format.Yellow("Secrets file don't exist! Creating.", "underline", 1))
+			err := createConfigFile()
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			fmt.Print(format.Green("Config file was created!", "bold", 2))
+			return 
+		}
+
 	} else {
-		fmt.Printf("\033[33mDir does not exist, creating it.\033[0m\n")
+		fmt.Print(format.Yellow("Dir does not exist, creating it.", "underline", 2))
 		err := createConfigDir()
 		if err != nil {
 			fmt.Println(err)
 		}
 
 		if fileExists(config_path) {
-			fmt.Printf("\033[1m\033[32mSuccess! Config dir was created\033[0m\n")
+			fmt.Print(format.Green("Success! Config dir was created\nCreating secrets file.", "bold", 2))
+			err := createConfigFile()
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			if fileExists(secrets_path) {
+				fmt.Print(format.Green("Success! Secrets file was created.", "bold", 2))
+			}
+
 		} else {
-			log.Fatal("File was not created! A problem ocurred.")
+			log.Fatal(format.Red("Dir was not created! A problem ocurred.", "bold", 1))
 		}
 	}
 	
@@ -46,12 +72,13 @@ func createConfigDir () error {
 	return nil
 }
 
-func getUserHomeDir() string {
-	home_dir, err := os.UserHomeDir()
+func createConfigFile () error {
+	file, err := os.Create(secrets_path)
 	if err != nil {
-		return ""
+		return fmt.Errorf("Creating secrets file: %w", err)
 	}
 
-	return home_dir
-}
+	defer file.Close() 
 
+	return nil
+}
