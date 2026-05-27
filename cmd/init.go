@@ -16,9 +16,9 @@ var (
 )
 
 func Init() {
-	fmt.Print(format.Green("Initiating, checking if config dir already exists.", "bold", 1))
+	fmt.Print(format.Green("Initializing, checking if config dir already exists.", "bold", 1))
 	if fileExists(config_path) {
-		fmt.Print(format.Green("Dir already exists!", "bold", 1))
+		fmt.Print(format.Green("Dir already exists! Exiting.", "bold", 1))
 
 		if fileExists(secrets_path) {
 			return
@@ -34,21 +34,22 @@ func Init() {
 		}
 
 	} else {
-		fmt.Print(format.Yellow("Dir does not exist, creating it.", "underline", 2))
+		fmt.Print(format.Yellow("Config dir does not exist! Creating.", "underline", 1))
 		err := createConfigDir()
 		if err != nil {
 			fmt.Println(err)
 		}
 
 		if fileExists(config_path) {
-			fmt.Print(format.Green("Success! Config dir was created\nCreating secrets file.", "bold", 2))
+			fmt.Print(format.Green("Success! Config dir was created.", "bold", 1))
+			fmt.Print(format.Yellow("Creating secrets file.", "underline", 1))
 			err := createConfigFile()
 			if err != nil {
 				log.Fatal(err)
 			}
 
 			if fileExists(secrets_path) {
-				fmt.Print(format.Green("Success! Secrets file was created.", "bold", 2))
+				fmt.Print(format.Green("Success! Secrets file was created.", "bold", 1))
 			}
 
 		} else {

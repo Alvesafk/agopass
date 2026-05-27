@@ -1,6 +1,17 @@
+/*
+Author © 2026 alvesafk <migueldealmeidaalves55@gmail.com>
+*/
+
+/*
+format lib, cstring.go, the intent of this package is to format strings in a easier and
+more legible way, instead of using multiple escape sequences, making the string illegible
+you can just call format.<Color>(string-to-format, modification<bold, underline...>, 
+amount of new line escape).
+*/
+
 package format
 
-func addMod(s string, mod string) string {
+func AddMod(s string, mod string) string {
 	switch mod {
 	case "bold":
 		s = "\033[1m" + s
@@ -20,7 +31,7 @@ func addMod(s string, mod string) string {
 }
 
 func Red(s string, mod string, escape int) string {
-	r := addMod(s, mod)
+	r := AddMod(s, mod)
 
 	r = "\033[31m" + r + "\033[0m"
 
@@ -34,7 +45,7 @@ func Red(s string, mod string, escape int) string {
 }
 
 func Green(s string, mod string, escape int) string {
-	r := addMod(s, mod)
+	r := AddMod(s, mod)
 
 	r = "\033[32m" + r + "\033[0m"
 
@@ -48,7 +59,7 @@ func Green(s string, mod string, escape int) string {
 }
 
 func Yellow(s string, mod string, escape int) string {
-	r := addMod(s, mod)
+	r := AddMod(s, mod)
 
 	r = "\033[33m" + r + "\033[0m"
 
@@ -62,7 +73,7 @@ func Yellow(s string, mod string, escape int) string {
 }
 
 func Blue(s string, mod string, escape int) string {
-	r := addMod(s, mod)
+	r := AddMod(s, mod)
 
 	r = "\033[34m" + r + "\033[0m"
 
@@ -76,7 +87,7 @@ func Blue(s string, mod string, escape int) string {
 }
 
 func Purple(s string, mod string, escape int) string {
-	r := addMod(s, mod)
+	r := AddMod(s, mod)
 
 	r = "\033[35m" + r + "\033[0m"
 
@@ -90,7 +101,7 @@ func Purple(s string, mod string, escape int) string {
 }
 
 func Cyan(s string, mod string, escape int) string {
-	r := addMod(s, mod)
+	r := AddMod(s, mod)
 
 	r = "\033[36m" + r + "\033[0m"
 
@@ -104,7 +115,7 @@ func Cyan(s string, mod string, escape int) string {
 }
 
 func White(s string, mod string, escape int) string {
-	r := addMod(s, mod)
+	r := AddMod(s, mod)
 
 	r = "\033[37m" + r + "\033[0m"
 
@@ -116,3 +127,13 @@ func White(s string, mod string, escape int) string {
 
 	return r
 }
+
+/*
+func Red(s string, mod string, escape int) string {}
+func Green(s string, mod string, escape int) string {}
+func Yellow(s string, mod string, escape int) string {}
+func Blue(s string, mod string, escape int) string {}
+func Purple(s string, mod string, escape int) string {}
+func Cyan(s string, mod string, escape int) string {}
+func White(s string, mod string, escape int) string {}
+*/
