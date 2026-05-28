@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Alvesafk/gopass/format"
+	"github.com/Alvesafk/gopass/color"
 )
 
 type Secret struct {
@@ -18,21 +18,21 @@ type Secret struct {
 
 func Add() {
 	if !fileExists(config_path) {
-		fmt.Print(format.Red("Secrets file does not exist, use <gopass init>, exiting.", "bold", 1))
+		fmt.Print(color.Red("Secrets file does not exist, use <gopass init>, exiting.", "bold", 1))
 		return
 	}
 
-	fmt.Print(format.Green("Add a Secret:", "bold", 1))
+	fmt.Print(color.Green("Add a Secret:", "bold", 1))
 
 	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Print(format.Yellow("Name of the secret: ", "none", 0))
+	fmt.Print(color.Yellow("Name of the secret: ", "none", 0))
 	name, err := reader.ReadString('\n')
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Print(format.Yellow("Secret word: ", "none", 0))
+	fmt.Print(color.Yellow("Secret word: ", "none", 0))
 	secret, err := reader.ReadString('\n')
 	if err != nil {
 		log.Fatal(err)
@@ -42,7 +42,7 @@ func Add() {
 
 	secretsFileStats, err := os.Stat(secrets_path)
 	if err != nil {
-		fmt.Print(format.Red("Secrets file does not exist, use <gopass init>, exiting.", "bold", 1))
+		fmt.Print(color.Red("Secrets file does not exist, use <gopass init>, exiting.", "bold", 1))
 		return
 	}
 
@@ -50,19 +50,19 @@ func Add() {
 		all_secrets := []Secret{new_secret}
 		data, err := json.Marshal(all_secrets)
 		if err != nil {
-			log.Fatal(format.Red("Could not serialize secret into JSON", "bold", 1))
+			log.Fatal(color.Red("Could not serialize secret into JSON", "bold", 1))
 		}
 
 		err = os.WriteFile(secrets_path, data, 0644)
 		if err != nil {
-			log.Fatal(format.Red("Could not write into file: %s", "bold", 1), err)	
+			log.Fatal(color.Red("Could not write into file: %s", "bold", 1), err)	
 		}
 	} else {
 		var all_secrets []Secret
 
 		data, err := os.ReadFile(secrets_path)
 		if err != nil {
-			log.Fatal(format.Red("Could not read the secrets file.", "bold", 1))
+			log.Fatal(color.Red("Could not read the secrets file.", "bold", 1))
 		}
 
 		json.Unmarshal(data, &all_secrets)
@@ -70,14 +70,14 @@ func Add() {
 
 		writeData, err := json.Marshal(all_secrets)
 		if err != nil {
-			log.Fatal(format.Red("Could not serialize secret into JSON", "bold", 1))
+			log.Fatal(color.Red("Could not serialize secret into JSON", "bold", 1))
 		}
 
 		err = os.WriteFile(secrets_path, writeData, 0644)
 		if err != nil {
-			log.Fatal(format.Red("Could not write into file: %s", "bold", 1), err)	
+			log.Fatal(color.Red("Could not write into file: %s", "bold", 1), err)	
 		}
 	}
 
-	fmt.Print(format.Green("Secret was saved!", "bold", 1))
+	fmt.Print(color.Green("Secret was saved!", "bold", 1))
 }

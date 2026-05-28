@@ -9,7 +9,7 @@ you can just call format.<Color>(string-to-format, modification<bold, underline.
 amount of new line escape).
 */
 
-package format
+package color
 
 func AddMod(s string, mod string) string {
 	switch mod {

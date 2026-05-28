@@ -7,12 +7,12 @@ import (
 	"math"
 	"os"
 
-	"github.com/Alvesafk/gopass/format"
+	"github.com/Alvesafk/gopass/color"
 )
 
 func List() {
 	if !fileExists(config_path) {
-		fmt.Print(format.Red("Secrets file does not exist, use <gopass init>, exiting.", "bold", 1))
+		fmt.Print(color.Red("Secrets file does not exist, use <gopass init>, exiting.", "bold", 1))
 		return
 	}
 
@@ -20,15 +20,15 @@ func List() {
 
 	data, err := os.ReadFile(secrets_path)
 	if err != nil {
-		log.Fatal(format.Red("Could not read the secrets file.", "bold", 1))
+		log.Fatal(color.Red("Could not read the secrets file.", "bold", 1))
 	}
 
 	json.Unmarshal(data, &all_secrets)
 	
 	for i, v := range all_secrets {
-		name := format.Green(v.Name, "bold", 0)
+		name := color.Green(v.Name, "bold", 0)
 
-		fmt.Println(format.Cyan("-------------------------------------------------------------------------------", "none", 0))
+		fmt.Println(color.Cyan("-------------------------------------------------------------------------------", "none", 0))
 		fmt.Printf("%v - %s\n    %s\n", i + 1, name, hidePassword(v.Key))
 	}
 }

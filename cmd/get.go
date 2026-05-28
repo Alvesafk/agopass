@@ -6,26 +6,26 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Alvesafk/gopass/format"
+	"github.com/Alvesafk/gopass/color"
 	"github.com/atotto/clipboard"
 )
 
 func Get(args []string) {
 	if !fileExists(config_path) {
-		fmt.Print(format.Red("Secrets file does not exist, use <gopass init>, exiting.", "bold", 1))
+		fmt.Print(color.Red("Secrets file does not exist, use <gopass init>, exiting.", "bold", 1))
 		return
 	}
 	
 	l := len(args)
 	if l != 3 {
 		if l > 3 {
-			fmt.Print(format.Red("Error: Too many arguments.", "bold", 1))
+			fmt.Print(color.Red("Error: Too many arguments.", "bold", 1))
 			PrintUsage(args)
 			return
 		}
 
 		if l < 3 {
-			fmt.Print(format.Red("Error: Missing arguments.", "bold", 1))
+			fmt.Print(color.Red("Error: Missing arguments.", "bold", 1))
 			PrintUsage(args)
 			return
 		}
@@ -37,7 +37,7 @@ func Get(args []string) {
 
 	data, err := os.ReadFile(secrets_path)
 	if err != nil {
-		fmt.Print(format.Red("Could not read the secrets file.", "bold", 1))
+		fmt.Print(color.Red("Could not read the secrets file.", "bold", 1))
 	}
 
 	json.Unmarshal(data, &all_secrets)
@@ -51,7 +51,7 @@ func Get(args []string) {
 	}
 
 	if to_get_secret.Key == "" && to_get_secret.Name == "" {
-		fmt.Print(format.Red("Could not find this key, check your typing.", "bold", 1))
+		fmt.Print(color.Red("Could not find this key, check your typing.", "bold", 1))
 		return 
 	}
 
@@ -60,6 +60,6 @@ func Get(args []string) {
 		panic(err)
 	}
 
-	fmt.Printf(format.Green("Success! %s key is in your clipboard.", "bold", 1), to_get_secret.Name)
+	fmt.Printf(color.Green("Success! %s key is in your clipboard.", "bold", 1), to_get_secret.Name)
 }
 
