@@ -3,9 +3,9 @@ Author © 2026 alvesafk <migueldealmeidaalves55@gmail.com>
 */
 
 /*
-format lib, cstring.go, the intent of this package is to format strings in a easier and
+color lib, cstring.go, the intent of this package is to format strings in a easier and
 more legible way, instead of using multiple escape sequences, making the string illegible
-you can just call format.<Color>(string-to-format, modification<bold, underline...>, 
+you can just call color.<Color>(string-to-format, modification<bold, underline...>, 
 amount of new line escape).
 */
 

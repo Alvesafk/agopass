@@ -26,7 +26,7 @@ func main() {
 	case "List", "list":
 		cmd.List()
 	case "Delete", "delete":
-		cmd.Delete()
+		cmd.Delete(args)
 	case "Get", "get":
 		cmd.Get(args)
 	default:
