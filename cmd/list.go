@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math"
 	"os"
 
 	"github.com/Alvesafk/gopass/format"
@@ -34,8 +35,15 @@ func List() {
 
 func hidePassword(pass string) string {
 	var result string
-	for i := 0; i < len(pass); i++ {
+	l := int(math.Min(float64(len(pass)), 25))
+
+	for i := 0; i < l; i++ {
 		result += "*"
 	}
+
+	if len(pass) > 25 {
+		result = result + "..."
+	}
+
 	return result
 }
