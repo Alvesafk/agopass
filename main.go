@@ -5,7 +5,6 @@ package main
 
 import (
 	"os"
-	"fmt"
 	"log"
 
 	"github.com/Alvesafk/gopass/cmd"
@@ -14,7 +13,7 @@ import (
 func main() {
 	args := os.Args
 	if len(args) < 2 {
-		printUsage(args)
+		cmd.PrintUsage(args)
 		log.Fatal("Invalid operation, try again.")
 	}
 
@@ -29,13 +28,9 @@ func main() {
 	case "Delete", "delete":
 		cmd.Delete()
 	case "Get", "get":
-		cmd.Get()
+		cmd.Get(args)
 	default:
-		printUsage(args)
+		cmd.PrintUsage(args)
 		log.Fatal("Invalid command, try again")
 	}
-}
-
-func printUsage(args []string) {
-	fmt.Printf("Usage instruction:\n%s <COMMAND>\nCOMMANDS:\ninit\nadd\nlist\ndelete\nget\n", args[0])
 }
