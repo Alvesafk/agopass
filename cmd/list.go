@@ -33,7 +33,7 @@ func hidePassword(pass string) string {
 	var result string
 	l := int(math.Min(float64(len(pass)), 25))
 
-	for i := 0; i < l; i++ {
+	for range l {
 		result += "*"
 	}
 

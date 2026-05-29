@@ -3,7 +3,6 @@ package cmd
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"strings"
 
@@ -11,31 +10,28 @@ import (
 	"github.com/Alvesafk/gopass/storage"
 )
 
-type Secret struct {
-	Name string
-	Key string
-}
-
 func Add(db storage.DB) {
 	fmt.Print(color.Green("Add a Secret:", "bold", 1))
 
 	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Print(color.Yellow("Name of the secret: ", "none", 0))
+	fmt.Print("Name of the secret: ")
 	name, err := reader.ReadString('\n')
 	if err != nil {
-		log.Fatal(err)
+		fmt.Print(color.Red("Could not read the name input.", "bold", 1))
+		return
 	}
 
-	fmt.Print(color.Yellow("Secret word: ", "none", 0))
+	fmt.Print("Secret word: ")
 	secret, err := reader.ReadString('\n')
 	if err != nil {
-		log.Fatal(err)
+		fmt.Print(color.Red("Could not read the key input.", "bold", 1))
+		return
 	}
 
 	_, err = db.Insert(strings.TrimSpace(name), strings.TrimSpace(secret))
 	if err != nil {
-		fmt.Print(color.Red("Error: Could not insert into Db.", "bold", 1))
+		fmt.Print(color.Red("Error: Could not insert into DB.", "bold", 1))
 		fmt.Println(err)
 		return
 	}
