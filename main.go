@@ -36,7 +36,7 @@ func main() {
 	case "Add", "add":
 		cmd.Add(*db)
 	case "List", "list":
-		cmd.List()
+		cmd.List(*db)
 	case "Delete", "delete":
 		cmd.Delete(args)
 	case "Get", "get":

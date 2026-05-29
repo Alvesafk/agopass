@@ -1,35 +1,26 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
-	"log"
 	"math"
-	"os"
 
 	"github.com/Alvesafk/gopass/color"
+	"github.com/Alvesafk/gopass/storage"
 )
 
-func List() {
-	if !fileExists(config_path) {
-		fmt.Print(color.Red("Secrets file does not exist, use <gopass init>, exiting.", "bold", 1))
+func List(db storage.DB) {
+	all_secrets, err := db.List()
+	if err != nil {
+		fmt.Print(color.Red("Could not list secrets from db", "bold", 1))
 		return
 	}
 
-	var all_secrets []Secret
+	fmt.Println("---------------~Secrets~---------------")
 
-	data, err := os.ReadFile(secrets_path)
-	if err != nil {
-		log.Fatal(color.Red("Could not read the secrets file.", "bold", 1))
-	}
-
-	json.Unmarshal(data, &all_secrets)
-	
-	for i, v := range all_secrets {
-		name := color.Green(v.Name, "bold", 0)
-
-		fmt.Println(color.Cyan("-------------------------------------------------------------------------------", "none", 0))
-		fmt.Printf("%v - %s\n    %s\n", i + 1, name, hidePassword(v.Key))
+	for _, v := range all_secrets {
+		fmt.Printf("Name: %s\n", v.Name)
+		fmt.Printf("Key: %s\n", hidePassword(v.Key))
+		fmt.Println("---------------------------------------")
 	}
 }
 
