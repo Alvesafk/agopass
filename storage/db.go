@@ -25,6 +25,12 @@ func (db *DB) migrate() error {
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			name TEXT NOT NULL,
 			key TEXT NOT NULL
+		);
+
+		CREATE TABLE IF NOT EXISTS config (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			name TEXT NOT NULL,
+			key TEXT NOT NULL
 		)
 	`)
 

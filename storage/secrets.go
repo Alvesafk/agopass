@@ -61,3 +61,32 @@ func (db *DB) Delete(id int) error {
 	_, err := db.conn.Exec(`DELETE FROM secrets WHERE id = ?`, id)
 	return err
 }
+
+func (db *DB) AddMasterKey(key string) (int64, error) {
+	res, err := db.conn.Exec(
+		`INSERT INTO secrets (name, key) VALUES (?, ?)`,
+		"master_key", key,
+		)
+	if err != nil {
+		return 0, err
+	}
+
+	return res.LastInsertId()
+}
+
+func (db *DB) GetHashedMasterKey() (*Secret, error) {
+	var mk Secret
+	err := db.conn.QueryRow(
+		`SELECT id, name, key FROM config WHERE name = ?`,
+		"master_key",
+		).Scan(&mk.ID, &mk.Name, &mk.Key)
+
+	if err == sql.ErrNoRows {
+		return nil, fmt.Errorf("Secret master key not found.")
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return &mk, nil
+}
