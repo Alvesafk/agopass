@@ -40,7 +40,7 @@ func main() {
 	case "Delete", "delete":
 		cmd.Delete(args)
 	case "Get", "get":
-		cmd.Get(args)
+		cmd.Get(*db ,args)
 	default:
 		cmd.PrintUsage(args)
 		log.Fatal("Invalid command, try again")

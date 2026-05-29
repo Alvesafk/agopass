@@ -33,7 +33,9 @@ func Add(db storage.DB) {
 		log.Fatal(err)
 	}
 
-	_, err = db.Insert(strings.TrimSpace(name), strings.TrimSpace(secret))
+	formated_name := strings.ToLower(strings.TrimSpace(name))
+
+	_, err = db.Insert(formated_name, strings.TrimSpace(secret))
 	if err != nil {
 		fmt.Print(color.Red("Error: Could not insert into Db.", "bold", 1))
 		fmt.Println(err)

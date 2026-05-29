@@ -1,21 +1,15 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/Alvesafk/gopass/color"
+	"github.com/Alvesafk/gopass/storage"
 	"github.com/atotto/clipboard"
 )
 
-func Get(args []string) {
-	if !fileExists(config_path) {
-		fmt.Print(color.Red("Secrets file does not exist, use <gopass init>, exiting.", "bold", 1))
-		return
-	}
-	
+func Get(db storage.DB, args []string) {
 	l := len(args)
 	if l != 3 {
 		if l > 3 {
@@ -33,26 +27,10 @@ func Get(args []string) {
 
 	to_get_name := strings.ToLower(strings.TrimSpace(args[2]))
 
-	var all_secrets []Secret
-
-	data, err := os.ReadFile(secrets_path)
+	to_get_secret, err := db.GetByName(to_get_name)
 	if err != nil {
-		fmt.Print(color.Red("Could not read the secrets file.", "bold", 1))
-	}
-
-	json.Unmarshal(data, &all_secrets)
-
-	var to_get_secret Secret
-
-	for _, v := range all_secrets {
-		if strings.ToLower(v.Name) == to_get_name {
-			to_get_secret = v
-		}
-	}
-
-	if to_get_secret.Key == "" && to_get_secret.Name == "" {
-		fmt.Print(color.Red("Could not find this key, check your typing.", "bold", 1))
-		return 
+		fmt.Println(err)
+		return
 	}
 
 	err = clipboard.WriteAll(to_get_secret.Key)
