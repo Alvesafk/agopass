@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/Alvesafk/gopass/color"
@@ -22,7 +23,8 @@ func Get(db storage.DB, args []string) {
 
 	err = clipboard.WriteAll(to_get_secret.Key)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
 	fmt.Printf(color.Green("Success! %s key is in your clipboard.", "bold", 1), to_get_secret.Name)

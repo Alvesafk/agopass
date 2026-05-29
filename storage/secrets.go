@@ -64,7 +64,7 @@ func (db *DB) Delete(id int) error {
 
 func (db *DB) AddMasterKey(key string) (int64, error) {
 	res, err := db.conn.Exec(
-		`INSERT INTO secrets (name, key) VALUES (?, ?)`,
+		`INSERT INTO config (name, key) VALUES (?, ?)`,
 		"master_key", key,
 		)
 	if err != nil {
@@ -89,4 +89,21 @@ func (db *DB) GetHashedMasterKey() (*Secret, error) {
 	}
 
 	return &mk, nil
+}
+
+func (db *DB) MasterKeyExists() (bool, error) {
+	var mk Secret
+	err := db.conn.QueryRow(
+		`SELECT id, name, key FROM config WHERE name = ?`,
+		"master_key",
+		).Scan(&mk.ID, &mk.Name, &mk.Key)
+
+	if err == sql.ErrNoRows {
+		return false, sql.ErrNoRows
+	}
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
