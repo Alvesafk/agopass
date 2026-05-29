@@ -27,3 +27,5 @@ func CheckAmountArguments(args []string) {
 		}
 	}
 }
+
+// todo :: function to check password from user with master_key hash of the db
