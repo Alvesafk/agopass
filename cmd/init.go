@@ -56,7 +56,6 @@ func Init() {
 			log.Fatal(color.Red("Dir was not created! A problem ocurred.", "bold", 1))
 		}
 	}
-	
 }
 
 func fileExists(filename string) bool {

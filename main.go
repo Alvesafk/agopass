@@ -4,10 +4,12 @@ Author © 2026 alvesafk <migueldealmeidaalves55@gmail.com>
 package main
 
 import (
-	"os"
 	"log"
+	"os"
+	"path/filepath"
 
 	"github.com/Alvesafk/gopass/cmd"
+	"github.com/Alvesafk/gopass/storage"
 )
 
 func main() {
@@ -17,12 +19,22 @@ func main() {
 		log.Fatal("Invalid operation, try again.")
 	}
 
+	home, _ := os.UserHomeDir()
+	db_path := filepath.Join(home, ".gopass", "secrets.db")
+	os.MkdirAll(filepath.Dir(db_path), 0755)
+
+	db, err := storage.New(db_path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
 
 	switch args[1] {
 	case "Init", "init":
 		cmd.Init()
 	case "Add", "add":
-		cmd.Add()
+		cmd.Add(*db)
 	case "List", "list":
 		cmd.List()
 	case "Delete", "delete":
