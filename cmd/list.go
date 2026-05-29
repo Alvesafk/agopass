@@ -15,6 +15,11 @@ func List(db storage.DB) {
 		return
 	}
 
+	if len(all_secrets) < 1 {
+		fmt.Print(color.Red("No secret registered! Use <gopass add> to add secrets.", "bold", 1))
+		return
+	}
+
 	fmt.Println("---------------~Secrets~---------------")
 
 	for _, v := range all_secrets {

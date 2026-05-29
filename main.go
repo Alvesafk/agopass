@@ -29,17 +29,14 @@ func main() {
 	}
 	defer db.Close()
 
-
 	switch args[1] {
-	case "Init", "init":
-		cmd.Init()
-	case "Add", "add":
+	case "Add", "add", "A", "a":
 		cmd.Add(*db)
-	case "List", "list":
+	case "List", "list", "L", "l":
 		cmd.List(*db)
-	case "Delete", "delete":
+	case "Delete", "delete", "D", "d":
 		cmd.Delete(*db, args)
-	case "Get", "get":
+	case "Get", "get", "G", "g":
 		cmd.Get(*db ,args)
 	default:
 		cmd.PrintUsage(args)
