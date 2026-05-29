@@ -1,21 +1,14 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
-	"math"
-	"os"
 	"strings"
 
 	"github.com/Alvesafk/gopass/color"
+	"github.com/Alvesafk/gopass/storage"
 )
 
-func Delete(args []string) {
-	if !fileExists(config_path) {
-		fmt.Print(color.Red("Secrets file does not exist, use <gopass init>, exiting.", "bold", 1))
-		return
-	}
-	
+func Delete(db storage.DB, args []string) {
 	l := len(args)
 	if l != 3 {
 		if l > 3 {
@@ -31,42 +24,21 @@ func Delete(args []string) {
 		}
 	}
 
-	to_get_name := strings.ToLower(strings.TrimSpace(args[2]))
+	to_get_name := strings.TrimSpace(args[2])
 
-	var all_secrets []Secret
-
-	data, err := os.ReadFile(secrets_path)
+	to_get_secret, err := db.GetByName(to_get_name)
 	if err != nil {
-		fmt.Print(color.Red("Could not read the secrets file.", "bold", 1))
-	}
-
-	json.Unmarshal(data, &all_secrets)
-
-	index := math.MinInt
-
-	for i, v := range all_secrets {
-		if strings.ToLower(v.Name) == to_get_name {
-			index = i
-		}
-	}
-
-	if index == math.MinInt {
-		fmt.Print(color.Red("Could not find this key, check your typing.", "bold", 1))
-		return 
-	}
-
-	all_secrets = RemoveSecret(all_secrets, index)
-
-	writeData, err := json.Marshal(all_secrets)
-	if err != nil {
-		fmt.Print(color.Red("Could not serialize secret into JSON", "bold", 1))
+		fmt.Println(err)
 		return
 	}
 
-	err = os.WriteFile(secrets_path, writeData, 0644)
+	err = db.Delete(to_get_secret.ID)
 	if err != nil {
-		fmt.Print(color.Red("Could not write into file: %s", "bold", 1), err)	
+		fmt.Printf(color.Red("Error: Could not delete %s.", "bold", 1), to_get_name)
+		fmt.Println(err)
 		return
 	}
+
+	fmt.Printf(color.Green("Success! %s secret was deleted.", "bold", 1), args[2])
 }
 

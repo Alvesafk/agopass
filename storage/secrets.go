@@ -58,6 +58,6 @@ func (db *DB) GetByName(name string) (*Secret, error) {
 }
 
 func (db *DB) Delete(id int) error {
-	_, err := db.conn.Exec(`DELETE FROM tasks WHERE id = ?`, id)
+	_, err := db.conn.Exec(`DELETE FROM secrets WHERE id = ?`, id)
 	return err
 }

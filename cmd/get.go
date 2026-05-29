@@ -25,7 +25,7 @@ func Get(db storage.DB, args []string) {
 		}
 	}
 
-	to_get_name := strings.ToLower(strings.TrimSpace(args[2]))
+	to_get_name := strings.TrimSpace(args[2])
 
 	to_get_secret, err := db.GetByName(to_get_name)
 	if err != nil {
