@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/Alvesafk/gopass/color"
+	"github.com/Alvesafk/gopass/storage"
 )
 
 func PrintUsage(args []string) {
@@ -28,4 +29,16 @@ func CheckAmountArguments(args []string) {
 	}
 }
 
-// todo :: function to check password from user with master_key hash of the db
+func IsMasterKeyHash(db storage.DB, s string) (bool, error) {
+	_, err := db.MasterKeyExists()
+	if err != nil {
+		return false, fmt.Errorf("Master key does not exist.")
+	}
+	
+	mk, err := db.GetHashedMasterKey()
+	if err != nil {
+		return false, fmt.Errorf("Could not get master key.")
+	}
+
+	return mk.Key == s, nil
+}
