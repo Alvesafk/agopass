@@ -50,7 +50,7 @@ func IsMasterKeyHash(db storage.DB, s string) (bool, error) {
 	return mk.Key == string(storage.HashMasterKey(s)), nil
 }
 
-func Authenticate(db storage.DB) {
+func Authenticate(db storage.DB) []byte {
 	for range MAX_PASSWORD_RETRIES {
 		fmt.Print(color.White("Enter with your master key: ", "bold", 0))
 		password, err := term.ReadPassword(int(syscall.Stdin)) 
@@ -70,10 +70,11 @@ func Authenticate(db storage.DB) {
 			continue
 		} else {
 			fmt.Print(color.Green("Authenticated.", "underline", 1))
-			return
+			return storage.HashMasterKey(string(password))
 		}
 	}
 
 	fmt.Print(color.Red("Could not authenticate, aborting.", "bold", 1))
 	os.Exit(1)
+	return nil
 }

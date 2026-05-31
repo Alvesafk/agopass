@@ -12,10 +12,15 @@ type Secret struct {
 	Key_Length int
 }
 
-func (db *DB) Insert(name, key string) (int64, error) {
+func (db *DB) Insert(name, key string, mk []byte) (int64, error) {
+	encrypted_key, err := Encrypt(key, mk)
+	if err != nil {
+		return 0, err
+	}
+
 	res, err := db.conn.Exec(
 		`INSERT INTO secrets (name, key, key_length) VALUES (?, ?, ?)`,
-		name, key, len(key),
+		name, encrypted_key, len(key),
 		)
 	if err != nil {
 		return 0, err

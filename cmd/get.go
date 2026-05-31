@@ -11,7 +11,7 @@ import (
 )
 
 func Get(db storage.DB, args []string) {
-	Authenticate(db)
+	mk := Authenticate(db)
 
 	CheckAmountArguments(args)
 
@@ -23,7 +23,13 @@ func Get(db storage.DB, args []string) {
 		return
 	}
 
-	err = clipboard.WriteAll(to_get_secret.Key)
+	decrypted_key, err := storage.Decrypt(to_get_secret.Key, mk)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	err = clipboard.WriteAll(decrypted_key)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)

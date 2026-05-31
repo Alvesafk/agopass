@@ -11,7 +11,7 @@ import (
 )
 
 func Add(db storage.DB) {
-	Authenticate(db)
+	mk := Authenticate(db)
 
 	reader := bufio.NewReader(os.Stdin)
 
@@ -31,7 +31,7 @@ func Add(db storage.DB) {
 		return
 	}
 
-	_, err = db.Insert(strings.TrimSpace(name), strings.TrimSpace(secret))
+	_, err = db.Insert(strings.TrimSpace(name), strings.TrimSpace(secret), mk)
 	if err != nil {
 		fmt.Print(color.Red("Error: Could not insert into DB.", "bold", 1))
 		fmt.Println(err)
