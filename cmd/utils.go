@@ -1,13 +1,14 @@
 package cmd
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"strings"
+	"syscall"
 
 	"github.com/Alvesafk/gopass/color"
 	"github.com/Alvesafk/gopass/storage"
+	"golang.org/x/term"
 )
 
 const (
@@ -50,17 +51,15 @@ func IsMasterKeyHash(db storage.DB, s string) (bool, error) {
 }
 
 func Authenticate(db storage.DB) {
-	reader := bufio.NewReader(os.Stdin)
-
 	for range MAX_PASSWORD_RETRIES {
 		fmt.Print(color.White("Enter with your master key: ", "bold", 0))
-		password, err := reader.ReadString('\n')
+		password, err := term.ReadPassword(int(syscall.Stdin)) 
 		if err != nil {
 			fmt.Print(color.Red("Could not read the password input.", "bold", 1))
 			os.Exit(1)
 		}
 
-		is, err := IsMasterKeyHash(db, strings.TrimSpace(password))
+		is, err := IsMasterKeyHash(db, strings.TrimSpace(string(password)))
 		if err != nil {
 			fmt.Print(color.Red("Could not access master key from db", "bold", 1))
 			os.Exit(1)
