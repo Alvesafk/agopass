@@ -64,9 +64,10 @@ func (db *DB) Delete(id int) error {
 }
 
 func (db *DB) AddMasterKey(key string) (int64, error) {
+	hashed_key := HashMasterKey(key)
 	res, err := db.conn.Exec(
 		`INSERT INTO config (name, key) VALUES (?, ?)`,
-		"master_key", key,
+		"master_key", hashed_key,
 		)
 	if err != nil {
 		return 0, err

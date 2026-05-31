@@ -47,7 +47,7 @@ func IsMasterKeyHash(db storage.DB, s string) (bool, error) {
 		return false, fmt.Errorf("Could not get master key.")
 	}
 
-	return mk.Key == s, nil
+	return mk.Key == string(storage.HashMasterKey(s)), nil
 }
 
 func Authenticate(db storage.DB) {
