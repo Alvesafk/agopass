@@ -24,7 +24,7 @@ func List(db storage.DB) {
 
 	for _, v := range all_secrets {
 		fmt.Printf("Name: %s\n", v.Name)
-		fmt.Printf("Key: %s\n", hidePassword(v.Key_Length))
+		fmt.Printf("Key:  %s\n", hidePassword(v.Key_Length))
 		fmt.Println("---------------------------------------")
 	}
 }

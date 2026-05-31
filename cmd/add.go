@@ -24,18 +24,32 @@ func Add(db storage.DB) {
 		return
 	}
 
-	fmt.Print("Secret word: ")
+	fmt.Print("Secret key: ")
 	secret, err := reader.ReadString('\n')
 	if err != nil {
 		fmt.Print(color.Red("Could not read the key input.", "bold", 1))
 		return
 	}
 
-	_, err = db.Insert(strings.TrimSpace(name), strings.TrimSpace(secret), mk)
+	fmt.Println()
+	fmt.Printf("Are you sure you want to add %s? y/N : ", strings.TrimSpace(name))
+	response, err := reader.ReadString('\n')
 	if err != nil {
-		fmt.Print(color.Red("Error: Could not insert into DB.", "bold", 1))
 		fmt.Println(err)
-		return
+	}
+
+	switch strings.TrimSpace(response) {
+	case "Y", "y", "yes", "Yes", "YES":
+		_, err = db.Insert(strings.TrimSpace(name), strings.TrimSpace(secret), mk)
+		if err != nil {
+			fmt.Print(color.Red("Error: Could not insert into DB.", "bold", 1))
+			fmt.Println(err)
+			return
+		}
+
+	default:
+		fmt.Print(color.White("Ok! Secret was not registered.", "bold", 1))
+		return 
 	}
 
 	fmt.Print(color.Green("Secret was saved!", "bold", 1))

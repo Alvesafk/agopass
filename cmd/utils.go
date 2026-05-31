@@ -51,6 +51,13 @@ func IsMasterKeyHash(db storage.DB, s string) (bool, error) {
 }
 
 func Authenticate(db storage.DB) []byte {
+	_, err := db.MasterKeyExists()
+	if err != nil {
+		fmt.Print(color.Red("Master key does not exist! Use <gopass init> to add a master key.", "bold", 1))
+		os.Exit(1)
+		return nil
+	}
+
 	for range MAX_PASSWORD_RETRIES {
 		fmt.Print(color.White("Enter with your master key: ", "bold", 0))
 		password, err := term.ReadPassword(int(syscall.Stdin)) 
