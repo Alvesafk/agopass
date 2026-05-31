@@ -11,6 +11,8 @@ import (
 )
 
 func Delete(db storage.DB, args []string) {
+	Authenticate(db)
+
 	CheckAmountArguments(args)
 
 	to_get_name := strings.TrimSpace(args[2])

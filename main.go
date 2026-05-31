@@ -29,9 +29,6 @@ func main() {
 	}
 	defer db.Close()
 
-	// todo :: rewrite init function, it will ask for a master password, the function
-	// must tell the user that this password is not saved anywhere on the db of the app
-	// so the user must remember or store the password some where
 	switch args[1] {
 	case "Init", "init", "I", "i":
 		cmd.Init(*db)
