@@ -1,4 +1,4 @@
-module github.com/Alvesafk/gopass
+module github.com/Alvesafk/agopass
 
 go 1.26.3
 

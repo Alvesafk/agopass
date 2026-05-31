@@ -5,8 +5,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Alvesafk/gopass/color"
-	"github.com/Alvesafk/gopass/storage"
+	"github.com/Alvesafk/agopass/color"
+	"github.com/Alvesafk/agopass/storage"
 	"github.com/atotto/clipboard"
 )
 

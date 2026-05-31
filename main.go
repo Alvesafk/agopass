@@ -8,8 +8,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/Alvesafk/gopass/cmd"
-	"github.com/Alvesafk/gopass/storage"
+	"github.com/Alvesafk/agopass/cmd"
+	"github.com/Alvesafk/agopass/storage"
 )
 
 func main() {

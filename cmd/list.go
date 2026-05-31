@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/Alvesafk/gopass/color"
-	"github.com/Alvesafk/gopass/storage"
+	"github.com/Alvesafk/agopass/color"
+	"github.com/Alvesafk/agopass/storage"
 )
 
 func List(db storage.DB) {
