@@ -24,20 +24,20 @@ func List(db storage.DB) {
 
 	for _, v := range all_secrets {
 		fmt.Printf("Name: %s\n", v.Name)
-		fmt.Printf("Key: %s\n", hidePassword(v.Key))
+		fmt.Printf("Key: %s\n", hidePassword(v.Key_Length))
 		fmt.Println("---------------------------------------")
 	}
 }
 
-func hidePassword(pass string) string {
+func hidePassword(kl int) string {
 	var result string
-	l := int(math.Min(float64(len(pass)), 25))
+	l := int(math.Min(float64(kl), 25))
 
 	for range l {
 		result += "*"
 	}
 
-	if len(pass) > 25 {
+	if kl > 25 {
 		result = result + "..."
 	}
 

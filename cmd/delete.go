@@ -25,6 +25,8 @@ func Delete(db storage.DB, args []string) {
 
 	reader := bufio.NewReader(os.Stdin)
 
+	fmt.Println("---------------~Delete~----------------")
+
 	fmt.Printf("Are you sure you want to delete %s? y/N : ", to_get_secret.Name)
 	response, err := reader.ReadString('\n')
 	if err != nil {

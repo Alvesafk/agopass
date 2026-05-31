@@ -6,9 +6,11 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"syscall"
 
 	"github.com/Alvesafk/gopass/color"
 	"github.com/Alvesafk/gopass/storage"
+	"golang.org/x/term"
 )
 
 func Init(db storage.DB) {
@@ -18,11 +20,13 @@ func Init(db storage.DB) {
 		reader := bufio.NewReader(os.Stdin)
 
 		fmt.Print(color.Green("No master key was found, create one: ", "bold", 0))
-		mk, err := reader.ReadString('\n')
+		mk, err := term.ReadPassword(int(syscall.Stdin))
 		if err != nil {
+			fmt.Println()
 			fmt.Print(color.Red("Could not read the master key input.", "bold", 1))
 			os.Exit(1)
 		}
+		fmt.Println()
 
 		fmt.Println("This key can NOT be retrieved from the Database.")
 		fmt.Println("This key will be used before the <add/delete/get> commands.")
@@ -37,7 +41,7 @@ func Init(db storage.DB) {
 
 		switch strings.TrimSpace(response) {
 		case "Y", "y", "yes", "Yes", "YES":
-			_, err = db.AddMasterKey(strings.TrimSpace(mk))
+			_, err = db.AddMasterKey(strings.TrimSpace(string(mk)))
 			if err != nil {
 				fmt.Print(color.Red("Could not save the master key, try again.", "bold", 1))
 				os.Exit(1)

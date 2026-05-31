@@ -24,7 +24,8 @@ func (db *DB) migrate() error {
 		CREATE TABLE IF NOT EXISTS secrets (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			name TEXT NOT NULL,
-			key TEXT NOT NULL
+			key TEXT NOT NULL,
+			key_length INTEGER NOT NULL
 		);
 
 		CREATE TABLE IF NOT EXISTS config (

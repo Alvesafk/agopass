@@ -15,7 +15,7 @@ func Add(db storage.DB) {
 
 	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Print(color.Green("Add a Secret:", "bold", 1))
+	fmt.Println("-----------------~Add~-----------------")
 
 	fmt.Print("Name of the secret: ")
 	name, err := reader.ReadString('\n')

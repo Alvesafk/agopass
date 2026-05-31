@@ -9,12 +9,13 @@ type Secret struct {
 	ID int
 	Name string 
 	Key string
+	Key_Length int
 }
 
 func (db *DB) Insert(name, key string) (int64, error) {
 	res, err := db.conn.Exec(
-		`INSERT INTO secrets (name, key) VALUES (?, ?)`,
-		name, key,
+		`INSERT INTO secrets (name, key, key_length) VALUES (?, ?, ?)`,
+		name, key, len(key),
 		)
 	if err != nil {
 		return 0, err
@@ -24,7 +25,7 @@ func (db *DB) Insert(name, key string) (int64, error) {
 }
 
 func (db *DB) List() ([]Secret, error) {
-	rows, err := db.conn.Query(`SELECT id, name, key FROM secrets`)
+	rows, err := db.conn.Query(`SELECT id, name, key, key_length FROM secrets`)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +34,7 @@ func (db *DB) List() ([]Secret, error) {
 	var secrets []Secret
 	for rows.Next() {
 		var s Secret
-		rows.Scan(&s.ID, &s.Name, &s.Key)
+		rows.Scan(&s.ID, &s.Name, &s.Key, &s.Key_Length)
 		secrets = append(secrets, s)
 	}
 
@@ -43,9 +44,9 @@ func (db *DB) List() ([]Secret, error) {
 func (db *DB) GetByName(name string) (*Secret, error) {
 	var s Secret
 	err := db.conn.QueryRow(
-		`SELECT id, name, key FROM secrets WHERE name = ?`,
+		`SELECT id, name, key, key_length FROM secrets WHERE name = ?`,
 		name,
-		).Scan(&s.ID, &s.Name, &s.Key)
+		).Scan(&s.ID, &s.Name, &s.Key, &s.Key_Length)
 
 	if err == sql.ErrNoRows {
 		return nil, fmt.Errorf("Secret %q not found.", name)
