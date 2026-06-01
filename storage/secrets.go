@@ -1,3 +1,6 @@
+/*
+Secrets.go is where the operations with the DB resides.
+*/
 package storage
 
 import (
@@ -5,6 +8,7 @@ import (
 	"fmt"
 )
 
+// Secret struct, they are equal to what the rows of the DB save.
 type Secret struct {
 	ID int
 	Name string 
@@ -12,12 +16,17 @@ type Secret struct {
 	Key_Length int
 }
 
+// Insert method accepts a name, a key, and a hashed Master Key, returns a int64 that is
+// the id of the new row and can return a error aswell, the method is to register a new
+// secret within the DB.
 func (db *DB) Insert(name, key string, mk []byte) (int64, error) {
+	// Encrypts the passed key.
 	encrypted_key, err := Encrypt(key, mk)
 	if err != nil {
 		return 0, err
 	}
 
+	// Exec a SQL command to save the new secret.
 	res, err := db.conn.Exec(
 		`INSERT INTO secrets (name, key, key_length) VALUES (?, ?, ?)`,
 		name, encrypted_key, len(key),
@@ -29,7 +38,10 @@ func (db *DB) Insert(name, key string, mk []byte) (int64, error) {
 	return res.LastInsertId()
 }
 
+// List method returns a slice of instantiate Secrets, it goes trough every secret on DB
+// saving then.
 func (db *DB) List() ([]Secret, error) {
+	// Query the db.
 	rows, err := db.conn.Query(`SELECT id, name, key, key_length FROM secrets`)
 	if err != nil {
 		return nil, err
@@ -37,6 +49,7 @@ func (db *DB) List() ([]Secret, error) {
 	defer rows.Close()
 
 	var secrets []Secret
+	// Iterate over them saving on the slice.
 	for rows.Next() {
 		var s Secret
 		rows.Scan(&s.ID, &s.Name, &s.Key, &s.Key_Length)
@@ -46,6 +59,8 @@ func (db *DB) List() ([]Secret, error) {
 	return secrets, rows.Err()
 }
 
+// GetByName method accepts a string and then query it against the DB, if the name is
+// found the method returns a instantiated Secret of it.
 func (db *DB) GetByName(name string) (*Secret, error) {
 	var s Secret
 	err := db.conn.QueryRow(
@@ -63,11 +78,14 @@ func (db *DB) GetByName(name string) (*Secret, error) {
 	return &s, nil
 }
 
+// Delete method deletes a row based on the id of that is passed.
 func (db *DB) Delete(id int) error {
 	_, err := db.conn.Exec(`DELETE FROM secrets WHERE id = ?`, id)
 	return err
 }
 
+// AddMasterKey hash the argument passed and insert it into the 'config' table, returns it's 
+// id if no error.
 func (db *DB) AddMasterKey(key string) (int64, error) {
 	hashed_key := HashMasterKey(key)
 	res, err := db.conn.Exec(
@@ -81,6 +99,7 @@ func (db *DB) AddMasterKey(key string) (int64, error) {
 	return res.LastInsertId()
 }
 
+// GetHashedMasterKey method get's the master key.
 func (db *DB) GetHashedMasterKey() (*Secret, error) {
 	var mk Secret
 	err := db.conn.QueryRow(
@@ -98,6 +117,7 @@ func (db *DB) GetHashedMasterKey() (*Secret, error) {
 	return &mk, nil
 }
 
+// MasterKeyExists verify if Master Key exists.
 func (db *DB) MasterKeyExists() (bool, error) {
 	var mk Secret
 	err := db.conn.QueryRow(
@@ -114,3 +134,15 @@ func (db *DB) MasterKeyExists() (bool, error) {
 
 	return true, nil
 }
+
+/*
+Index:
+type Secret struct
+func (db *DB) Insert(name, key string, mk []byte) (int64, error)
+func (db *DB) List() ([]Secret, error)
+func (db *DB) GetByName(name string) (*Secret, error) 
+func (db *DB) Delete(id int) error
+func (db *DB) AddMasterKey(key string) (int64, error)
+func (db *DB) GetHashedMasterKey() (*Secret, error)
+func (db *DB) MasterKeyExists() (bool, error)
+*/
