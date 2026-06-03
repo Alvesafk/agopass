@@ -59,6 +59,8 @@ func main() {
 		cmd.Delete(*db, args)
 	case "Get", "get", "G", "g":
 		cmd.Get(*db, args)
+	case "Update", "update", "U", "u":
+		cmd.Update(*db, args)
 	default:
 		cmd.PrintUsage(args)
 		log.Fatal("Invalid command, try again")

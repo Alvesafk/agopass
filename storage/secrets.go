@@ -84,6 +84,21 @@ func (db *DB) Delete(id int) error {
 	return err
 }
 
+// Update function method accepts a id of the row that will be changed, a Secret Struct 
+// with the new content and the master key in order to encrypt key if needed, return error
+// if any.
+func (db *DB) Update(id_to_change int, new_secret Secret, mk []byte) error {
+	encrypted_key, err := Encrypt(new_secret.Key, mk)
+	if err != nil {
+		return err
+	}
+
+	_, err = db.conn.Exec(`UPDATE secrets SET name = ? key = ? key_length = ? WHERE id = ?`,
+		new_secret.Name, encrypted_key, len(new_secret.Key), id_to_change)
+
+	return err
+}
+
 // AddMasterKey hash the argument passed and insert it into the 'config' table, returns it's 
 // id if no error.
 func (db *DB) AddMasterKey(key string) (int64, error) {
@@ -142,6 +157,7 @@ func (db *DB) Insert(name, key string, mk []byte) (int64, error)
 func (db *DB) List() ([]Secret, error)
 func (db *DB) GetByName(name string) (*Secret, error) 
 func (db *DB) Delete(id int) error
+func (db *DB) Update(id_to_change int, new_secret Secret, mk []byte) error
 func (db *DB) AddMasterKey(key string) (int64, error)
 func (db *DB) GetHashedMasterKey() (*Secret, error)
 func (db *DB) MasterKeyExists() (bool, error)
