@@ -101,6 +101,45 @@ func Authenticate(db storage.DB) []byte {
 	return nil
 }
 
+// todo :: consertar essa porra, que função merda puta que pariu
+func CheckArgumentSpelling(args []string, db storage.DB) (storage.Secret, error) {
+	query := strings.ToLower(args[2])
+	all_secrets, err := db.List()
+	if err != nil {
+		return storage.Secret{}, err
+	}
+
+	var probable_secret int
+	var compare_count int
+	for index, secret := range all_secrets {
+		var this_count int
+		for i, c := range strings.ToLower(secret.Name) {
+			if len(query) - 1 < i {
+				break
+			}
+
+			if rune(c) == rune(query[i]) {
+				this_count++
+			}
+		}
+
+		if this_count > compare_count && this_count > 0 {
+			compare_count = this_count
+			probable_secret = index
+		} 	
+	}
+
+	if compare_count <= 0 {
+		probable_secret = -1
+	}	
+
+	if probable_secret < 0 {
+		return storage.Secret{}, fmt.Errorf("Query wasn't close to anything in db.")
+	}
+
+	return all_secrets[probable_secret], nil
+}
+
 /*
 Index:
 func PrintUsage(args []string)
