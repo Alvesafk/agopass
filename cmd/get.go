@@ -19,12 +19,12 @@ import (
 
 // Get function receives a DB connection and a arguments slice.
 func Get(db storage.DB, args []string) {
+	// Check the amount of arguments passed with the command.
+	CheckAmountArguments(args)
+
 	// Authenticate user based on master key, if it authenticates the hash of the MK
 	// is returned.
 	mk := Authenticate(db)
-
-	// Check the amount of arguments passed with the command.
-	CheckAmountArguments(args)
 
 	// Get a initialized struct of the key by name.
 	reader := bufio.NewReader(os.Stdin)

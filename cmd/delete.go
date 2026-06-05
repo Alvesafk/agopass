@@ -24,17 +24,32 @@ func Delete(db storage.DB, args []string) {
 	// Auth function
 	Authenticate(db)
 
-	to_get_name := strings.TrimSpace(args[2])
-
 	// db.GetByName() method returns a initialized Struct of a secret if is found by
 	// the name that is used as argument.
-	to_get_secret, err := db.GetByName(to_get_name)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
 	reader := bufio.NewReader(os.Stdin)
+	to_get_secret, err := db.GetByName(args[2])
+	if err != nil {
+		probable_secret, err := CheckArgumentSpelling(args, db)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		fmt.Printf(color.Yellow("Wasn't able to retrieve a exact match, did you mean %s? y/N : ", "bold", 0), probable_secret.Name)
+		response, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Print(color.Red("Wasn't able to retrieve the reponse input, aborting.", "bold", 1))
+			os.Exit(1)
+		}
+
+		switch strings.TrimSpace(response) {
+		case "Yes", "yes", "YES", "y", "Y":
+			to_get_secret = &probable_secret
+		default:
+			fmt.Println("Ok! Exiting the program.")
+			os.Exit(1)
+		}
+	}
 
 	fmt.Println("---------------~Delete~----------------")
 
@@ -50,15 +65,15 @@ func Delete(db storage.DB, args []string) {
 		// that's why we first need to get the secret struct.
 		err = db.Delete(to_get_secret.ID)
 		if err != nil {
-			fmt.Printf(color.Red("Error: Could not delete %s.", "bold", 1), to_get_name)
+			fmt.Printf(color.Red("Error: Could not delete %s.", "bold", 1), to_get_secret.Name)
 			fmt.Println(err)
 			return
 		}
 
-		fmt.Printf(color.Green("Success! %s secret was deleted.", "bold", 1), to_get_name)
+		fmt.Printf(color.Green("Success! %s secret was deleted.", "bold", 1), to_get_secret.Name)
 
 	default:
-		fmt.Printf(color.White("%s secret was not deleted.", "bold", 1), to_get_name)
+		fmt.Printf(color.White("%s secret was not deleted.", "bold", 1), to_get_secret.Name)
 		return 
 	}
 }
