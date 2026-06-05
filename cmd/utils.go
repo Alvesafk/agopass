@@ -101,7 +101,9 @@ func Authenticate(db storage.DB) []byte {
 	return nil
 }
 
-// todo :: consertar essa porra, que função merda puta que pariu
+// CheckArgumentSpelling checks the spelling of the optional third argument, it checks if
+// argument, when not a exact match, 'looks' like other Secrets on the DB, if it is it returns
+// the instatieted Secret.
 func CheckArgumentSpelling(args []string, db storage.DB) (storage.Secret, error) {
 	query := strings.ToLower(args[2])
 	all_secrets, err := db.List()
@@ -112,13 +114,14 @@ func CheckArgumentSpelling(args []string, db storage.DB) (storage.Secret, error)
 	var probable_secret int
 	var compare_count int
 	for index, secret := range all_secrets {
-		var this_count int
-		for i, c := range strings.ToLower(secret.Name) {
-			if len(query) - 1 < i {
-				break
-			}
+		if strings.Contains(query, strings.ToLower(secret.Name)) {
+			probable_secret = index
+			break
+		}
 
-			if rune(c) == rune(query[i]) {
+		var this_count int
+		for _, c := range strings.ToLower(secret.Name) {
+			if strings.ContainsRune(query, c) {
 				this_count++
 			}
 		}
@@ -130,12 +133,8 @@ func CheckArgumentSpelling(args []string, db storage.DB) (storage.Secret, error)
 	}
 
 	if compare_count <= 0 {
-		probable_secret = -1
-	}	
-
-	if probable_secret < 0 {
 		return storage.Secret{}, fmt.Errorf("Query wasn't close to anything in db.")
-	}
+	}	
 
 	return all_secrets[probable_secret], nil
 }
@@ -146,4 +145,5 @@ func PrintUsage(args []string)
 func CheckAmountArguments(args []string)
 func IsMasterKeyHash(db storage.DB, s string) (bool, error
 func Authenticate(db storage.DB) []byte
+func CheckArgumentSpelling(args []string, db storage.DB) (storage.Secret, error)
 */
