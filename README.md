@@ -52,7 +52,7 @@ After you created your **Master Key** you can use the other commands, in this mo
     - Delete a key registered on your DB based on it's name, let's say i want to delete my Github password from agopass, i will do `agopass delete Github`, will prompt me asking if i really want to do it. Remember that names are case sensitive.
 
 This is the project for now, some features that i want to work next:
-- [ ] Update command to update or change the a registered key.
+- [x] Update command to update or change the registered key.
 - [ ] A way to export and import the DB, without just copying the DB binary.
 
 Thanks for your attention, Alvesafk.

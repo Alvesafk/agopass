@@ -7,6 +7,7 @@ Ex.: agopass get Github
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"strings"
@@ -25,13 +26,30 @@ func Get(db storage.DB, args []string) {
 	// Check the amount of arguments passed with the command.
 	CheckAmountArguments(args)
 
-	to_get_name := strings.TrimSpace(args[2])
-
 	// Get a initialized struct of the key by name.
-	to_get_secret, err := db.GetByName(to_get_name)
+	reader := bufio.NewReader(os.Stdin)
+	to_get_secret, err := db.GetByName(args[2])
 	if err != nil {
-		fmt.Println(err)
-		return
+		probable_secret, err := CheckArgumentSpelling(args, db)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		fmt.Printf(color.Yellow("Wasn't able to retrieve a exact match, did you mean %s? y/N : ", "bold", 0), probable_secret.Name)
+		response, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Print(color.Red("Wasn't able to retrieve the reponse input, aborting.", "bold", 1))
+			os.Exit(1)
+		}
+
+		switch strings.TrimSpace(response) {
+		case "Yes", "yes", "YES", "y", "Y":
+			to_get_secret = &probable_secret
+		default:
+			fmt.Println("Ok! Exiting the program.")
+			os.Exit(1)
+		}
 	}
 
 	// storage.Decrypt() accepts a string and the hashed Master Key, using them the
