@@ -93,7 +93,7 @@ func (db *DB) Update(id_to_change int, new_secret Secret, mk []byte) error {
 		return err
 	}
 
-	_, err = db.conn.Exec(`UPDATE secrets SET name = ? key = ? key_length = ? WHERE id = ?`,
+	_, err = db.conn.Exec(`UPDATE secrets SET name = ?, key = ?, key_length = ? WHERE id = ?`,
 		new_secret.Name, encrypted_key, len(new_secret.Key), id_to_change)
 
 	return err

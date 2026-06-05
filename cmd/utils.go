@@ -115,8 +115,7 @@ func CheckArgumentSpelling(args []string, db storage.DB) (storage.Secret, error)
 	var compare_count int
 	for index, secret := range all_secrets {
 		if strings.Contains(query, strings.ToLower(secret.Name)) {
-			probable_secret = index
-			break
+			return all_secrets[index], nil
 		}
 
 		var this_count int
