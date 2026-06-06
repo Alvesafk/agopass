@@ -66,7 +66,12 @@ func IsMasterKeyHash(db storage.DB, s string) (bool, error) {
 // Master Key, the user has 3 tries to get it right, if it fails the program will abort.
 // If they get it right the program follows the normal flow.
 func Authenticate(db storage.DB) []byte {
-	_, err := db.MasterKeyExists()
+	tmp_mk, err := loadTmpHash()
+	if err == nil {
+		return tmp_mk
+	}
+
+	_, err = db.MasterKeyExists()
 	if err != nil {
 		fmt.Print(color.Red("Master key does not exist! Use <gopass init> to add a master key.", "bold", 1))
 		os.Exit(1)
@@ -92,7 +97,15 @@ func Authenticate(db storage.DB) []byte {
 			continue
 		} else {
 			fmt.Print(color.Green("Authenticated.", "underline", 1))
-			return storage.HashMasterKey(string(password))
+			hashed_mk := storage.HashMasterKey(string(password))
+
+			err = saveTmpHash(hashed_mk)
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+
+			return hashed_mk
 		}
 	}
 
@@ -138,6 +151,24 @@ func CheckArgumentSpelling(args []string, db storage.DB) (storage.Secret, error)
 	return all_secrets[probable_secret], nil
 }
 
+func sessionFile() string {
+	ppid := os.Getppid()
+	return fmt.Sprintf("/tmp/agopass_%d", ppid)
+}
+
+func saveTmpHash(hash []byte) error {
+	return os.WriteFile(sessionFile(), hash, 0600)
+}
+
+func loadTmpHash() ([]byte, error) {
+	data, err := os.ReadFile(sessionFile())
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
+
 /*
 Index:
 func PrintUsage(args []string)
@@ -145,4 +176,7 @@ func CheckAmountArguments(args []string)
 func IsMasterKeyHash(db storage.DB, s string) (bool, error
 func Authenticate(db storage.DB) []byte
 func CheckArgumentSpelling(args []string, db storage.DB) (storage.Secret, error)
+func sessionFile() string
+func saveTmpHash(hash []byte) error 
+func loadTmpHash() ([]byte, error)
 */
