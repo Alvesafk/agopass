@@ -61,6 +61,8 @@ func main() {
 		cmd.Get(*db, args)
 	case "Update", "update", "U", "u":
 		cmd.Update(*db, args)
+	case "Version", "version", "V", "v":
+		cmd.Version()
 	default:
 		cmd.PrintUsage(args)
 		log.Fatal("Invalid command, try again")
