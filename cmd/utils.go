@@ -21,7 +21,14 @@ const (
 
 // Prints the agopass usage.
 func PrintUsage(args []string) {
-	fmt.Printf("Usage instruction:\n%s <COMMAND>\nCOMMANDS:\ninit\nadd\nlist\ndelete\nget\n", args[0])
+	fmt.Println("Usage instructions:")
+	fmt.Printf("%s <COMMAND> [ARG-IF-NEEDED]\n", args[0])
+	fmt.Println("Init / init / I / i     :: Create DB and prompt for master key.")
+	fmt.Println("Add / add / A / a       :: Create a secret in DB.")
+	fmt.Println("List / list / L / l     :: List all registered secrets.")
+	fmt.Println("Delete / delete / D / d :: Delete a secret.")
+	fmt.Println("Get / get / G / g       :: Get the secret key.")
+	fmt.Println("Update / update / U / u :: Modify a registered secret.")
 }
 
 // Check the amount of arguments passed on a args string slice, usually on the commands
@@ -151,15 +158,23 @@ func CheckArgumentSpelling(args []string, db storage.DB) (storage.Secret, error)
 	return all_secrets[probable_secret], nil
 }
 
+// sessionFile() function returns the path to a temporary session file based on the ppid
+// of the shell process, the intend is that once you authenticate in a shell process you
+// won't need to do it again till you create a new shell process.
 func sessionFile() string {
 	ppid := os.Getppid()
 	return fmt.Sprintf("/tmp/agopass_%d", ppid)
 }
 
+// saveTmpHash writes your hashed and encrypted master key in order to do the auto auth,
+// it stays on the /tmp/ so all of this files are deleted on shutdown.
 func saveTmpHash(hash []byte) error {
 	return os.WriteFile(sessionFile(), hash, 0600)
 }
 
+// loadTmpHash tries to load the session file based on the ppid of the actual shell process
+// if the file could not be found it returns an error, if the file was found, returns the
+// hashed master key.
 func loadTmpHash() ([]byte, error) {
 	data, err := os.ReadFile(sessionFile())
 	if err != nil {
