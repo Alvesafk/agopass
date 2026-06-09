@@ -10,12 +10,13 @@ import (
 	"os"
 	"strings"
 
+	"github.com/peterh/liner"
 	"github.com/Alvesafk/agopass/color"
 	"github.com/Alvesafk/agopass/storage"
 )
 
 // Add function, it receives a DB connection.
-func Add(db storage.DB) {
+func Add(db storage.DB, args []string) {
 	// Authenticate function, it auth the user based on the MK, if the user get their
 	// password wrong tree times in a row the program is aborted, if they get it right
 	// the program continues and the MK Hash it's returned via the Authenticate func
@@ -26,11 +27,16 @@ func Add(db storage.DB) {
 
 	fmt.Println("-----------------~Add~-----------------")
 
-	fmt.Print("Name of the secret: ")
-	name, err := reader.ReadString('\n')
-	if err != nil {
-		fmt.Print(color.Red("Could not read the name input.", "bold", 1))
-		return
+	// If a argument is sent onto the command it will write into the name input, user
+	// can enter if it's what they want or just remove it and write what they want.
+	var name string
+	if len(args) > 2 {
+		line := liner.NewLiner()
+		name, _ = line.PromptWithSuggestion("New name: ", args[2], -1)
+		line.Close()	
+	} else {
+		fmt.Print("Name of the secret: ")
+		name, _= reader.ReadString('\n')
 	}
 
 	fmt.Print("Secret key: ")

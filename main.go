@@ -52,7 +52,7 @@ func main() {
 	case "Init", "init", "I", "i":
 		cmd.Init(*db)
 	case "Add", "add", "A", "a":
-		cmd.Add(*db)
+		cmd.Add(*db, args)
 	case "List", "list", "L", "l":
 		cmd.List(*db)
 	case "Delete", "delete", "D", "d":
