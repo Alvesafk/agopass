@@ -5,11 +5,26 @@ Author © 2026 alvesafk <migueldealmeidaalves55@gmail.com>
 /*
 color lib, cstring.go, the intent of this package is to format strings in a easier and
 more legible way, instead of using multiple escape sequences, making the string illegible
-you can just call color.<Color>(string-to-format, modification<bold, underline...>, 
+you can just call color.<Color>(string-to-format, modification<bold, underline...>,
 amount of new line escape).
 */
 
 package color
+
+import (
+	"strings"
+)
+
+const (
+	reset   = "\033[0m"
+	cRed    = "\033[31m"
+	cGreen  = "\033[32m"
+	cYellow = "\033[33m"
+	cBlue   = "\033[34m"
+	cPurple = "\033[35m"
+	cCyan   = "\033[36m"
+	cWhite  = "\033[37m"
+)
 
 // AddMod function adds a "modifier" to a string, a modifier is just a escape sequence that
 // changes the way the text is rendered, you have: "bold", "underline", "strike", "italic",
@@ -31,108 +46,24 @@ func AddMod(s, mod string) string {
 	return s
 }
 
-// Red function, all the other functions follow the same format so i will not be writing
-// stuff on them, the colors function accepts a base string, a modifier, and how many new
-// lines you want on the end of the string, it returns a string formatted based on your
-// choices.
-func Red(s string, mod string, escape int) string {
-	r := AddMod(s, mod)
-
-	r = "\033[31m" + r + "\033[0m"
-
+// All color functions are just a wrapper of this one, it's the one that adds the color and
+// new line escape sequences.
+func colorize(s, mod, code string, escape int) string {
+	r := code + AddMod(s, mod) + reset
 	if escape > 0 {
-		for range escape {
-			r += "\n"
-		}
+		r += strings.Repeat("\n", escape)
 	}
 
 	return r
 }
 
-func Green(s string, mod string, escape int) string {
-	r := AddMod(s, mod)
-
-	r = "\033[32m" + r + "\033[0m"
-
-	if escape > 0 {
-		for range escape {
-			r += "\n"
-		}
-	}
-
-	return r
-}
-
-func Yellow(s string, mod string, escape int) string {
-	r := AddMod(s, mod)
-
-	r = "\033[33m" + r + "\033[0m"
-
-	if escape > 0 {
-		for range escape {
-			r += "\n"
-		}
-	}
-
-	return r
-}
-
-func Blue(s string, mod string, escape int) string {
-	r := AddMod(s, mod)
-
-	r = "\033[34m" + r + "\033[0m"
-
-	if escape > 0 {
-		for range escape {
-			r += "\n"
-		}
-	}
-
-	return r
-}
-
-func Purple(s string, mod string, escape int) string {
-	r := AddMod(s, mod)
-
-	r = "\033[35m" + r + "\033[0m"
-
-	if escape > 0 {
-		for range escape {
-			r += "\n"
-		}
-	}
-
-	return r
-}
-
-func Cyan(s string, mod string, escape int) string {
-	r := AddMod(s, mod)
-
-	r = "\033[36m" + r + "\033[0m"
-
-	if escape > 0 {
-		for range escape {
-			r += "\n"
-		}
-	}
-
-	return r
-}
-
-func White(s string, mod string, escape int) string {
-	r := AddMod(s, mod)
-
-	r = "\033[37m" + r + "\033[0m"
-
-	if escape > 0 {
-		for range escape {
-			r += "\n"
-		}
-	}
-
-	return r
-}
-
+func Red(s, mod string, escape int) string    { return colorize(s, mod, cRed, escape) }
+func Green(s, mod string, escape int) string  { return colorize(s, mod, cGreen, escape) }
+func Yellow(s, mod string, escape int) string { return colorize(s, mod, cYellow, escape) }
+func Blue(s, mod string, escape int) string   { return colorize(s, mod, cBlue, escape) }
+func Purple(s, mod string, escape int) string { return colorize(s, mod, cPurple, escape) }
+func Cyan(s, mod string, escape int) string   { return colorize(s, mod, cCyan, escape) }
+func White(s, mod string, escape int) string  { return colorize(s, mod, cWhite, escape) }
 /*
 func AddMod(s, mod string) string
 func Red(s string, mod string, escape int) string

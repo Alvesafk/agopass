@@ -45,9 +45,9 @@ func main() {
 	defer db.Close()
 
 	// Switch to get what user want to do, i could have used Cobra or something like
-	// that, but i prefer doing it mysel, i believe aswell that CLI should be simple
-	// and i don't think excessive amounts of tags really help on your application
-	// so that's why agopass have now tags whatsoever, for now atleast.
+	// that, but i prefer doing it myself, i believe aswell that CLI should be simple
+	// and i don't think excessive amounts of flags really help on your application
+	// so that's why agopass have now flags whatsoever, for now at least.
 	switch args[1] {
 	case "Init", "init", "I", "i":
 		cmd.Init(*db)
