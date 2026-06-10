@@ -34,7 +34,10 @@ func main() {
 	// Get's the home dir of the user to create the: application folder and them the DB.
 	home, _ := os.UserHomeDir()
 	db_path := filepath.Join(home, ".agopass", "secrets.db")
-	os.MkdirAll(filepath.Dir(db_path), 0755)
+	err := os.MkdirAll(filepath.Dir(db_path), 0755)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// storage.New() is a function that creates a connection with the existing DB, it
 	// also creates the DB does not exist when the program it's called.
@@ -42,7 +45,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
+	defer func() {
+		if err = db.Close(); err != nil {
+			log.Print(err)
+		}
+	}()
 
 	// Switch to get what user want to do, i could have used Cobra or something like
 	// that, but i prefer doing it myself, i believe aswell that CLI should be simple

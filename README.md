@@ -30,7 +30,7 @@ Go install:
 go install github.com/Alvesafk/agopass@latest
 ```
 
-It will install for you, will be on your `$GOPATH/bin`, you should export your Go bin dir with your normal bin folder, than you can use whenever and wherever.
+It will install for you, will be on your `$GOPATH/bin`, you should export your Go bin directory to your $PATH variable on your shell, then you can use whenever and wherever.
 
 ## How to use it?
 
