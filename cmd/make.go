@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"math/big"
 	"os"
+	"strings"
 
 	"github.com/Alvesafk/agopass/color"
 	"github.com/atotto/clipboard"
@@ -28,12 +29,16 @@ const (
 func Make() {
 	fmt.Print(color.AddMod("Making a new random key, putting on your clipboard.\n", "bold"))
 
-	var result string
+	var sb strings.Builder
+	sb.Grow(DEFAULT_LENGHT)
+
 	for range DEFAULT_LENGHT {
 		i, _ := rand.Int(rand.Reader, big.NewInt(int64(len(CHARS))))
 
-		result += string(CHARS[i.Int64()])
+		sb.WriteByte(CHARS[i.Int64()])
 	}
+
+	result := sb.String()
 
 	err := clipboard.WriteAll(result)
 	if err != nil {
