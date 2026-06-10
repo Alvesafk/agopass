@@ -52,6 +52,8 @@ After you created your **Master Key** you can use the other commands, in this mo
     - Delete a secret registered on your DB based on it's name, let's say i want to delete my Github password from agopass, i will do `agopass delete Github`, will prompt me asking if i really want to do it. Remember that names are case sensitive.
 - `update`
     - Update a secret registered on the DB, the name and the key can be changed, `agopass update github` will prompt me to update my Github key, it has a way to check typing so in most cases the program will find the key that you're looking for. 
+- `make`
+    - Creates a random 32 bit long key and puts into your clipboard, the key is created with by adding random indexes of a long string with characters, numbers and symbols, the random indexes are created by the *crypto/rand*, so they have enough entropy to not be easily seeded, or not seeded at all.
 
 This is the project for now, some features that i want to work next:
 - [x] Update command to update or change the registered key.
