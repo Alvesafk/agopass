@@ -63,6 +63,8 @@ func main() {
 		cmd.Update(*db, args)
 	case "Version", "version", "V", "v":
 		cmd.Version()
+	case "Make", "make", "M", "m":
+		cmd.Make()
 	default:
 		cmd.PrintUsage(args)
 		log.Fatal("Invalid command, try again")
