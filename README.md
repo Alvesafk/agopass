@@ -20,7 +20,7 @@ Compile from source:
 ```
 git clone https://github.com/Alvesafk/agopass --depth=1
 cd agopass
-go build -o bin/agopass main.go
+go build -o bin/agopass .
 ```
 Then just put on your bin directory for you to be able to access whenever.
 
@@ -54,10 +54,12 @@ After you created your **Master Key** you can use the other commands, in this mo
     - Update a secret registered on the DB, the name and the key can be changed, `agopass update github` will prompt me to update my Github key, it has a way to check typing so in most cases the program will find the key that you're looking for. 
 - `make`
     - Creates a random 32 bit long key and puts into your clipboard, the key is created with by adding random indexes of a long string with characters, numbers and symbols, the random indexes are created by the *crypto/rand*, so they have enough entropy to not be easily seeded, or not seeded at all.
+- `auto`
+    - Setup the autocomplete scripts, it's called on the init command as well, but in case you refused on the init you can always go back and setup again.
 
 This is the project for now, some features that i want to work next:
 - [x] Update command to update or change the registered key.
-- [ ] Autocomplete scripts, for auto completing the commands.
+- [x] Autocomplete scripts, for auto completing the commands.
 - [ ] A way to export and import the DB, without just copying the DB binary.
 
 Thanks for your attention, Alvesafk.
