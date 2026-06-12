@@ -98,6 +98,7 @@ func Init(db storage.DB) {
 	}
 
 	if !autocomplete_exists {
+		fmt.Println()
 		fmt.Println("Want to setup the autocomplete script? It will autocomplete the commands for you when you press <tab>")
 		fmt.Println("Note: It WILL be appended to yout .rc (.bashrc, .zshrc), you can take this script to another file and source it, or leave it there.")
 		fmt.Print(color.Yellow("Knowing this, you want to setup the autocomplete script? y/N : ", "bold", 0))

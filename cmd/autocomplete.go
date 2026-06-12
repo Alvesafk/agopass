@@ -1,3 +1,6 @@
+/*
+autocomplete.go is where the functions related with the autocompletion on the cli reside.
+*/
 package cmd
 
 import (
@@ -7,6 +10,7 @@ import (
 	"strings"
 )
 
+// The actuall shell scripts, it works with bash and zsh for now.
 const (
 	BASH_COMP_SCRIPT = `
 _agopass_completion() {
@@ -48,6 +52,10 @@ compdef _agopass_completion agopass
 	`
 )
 
+// Main autocomplete function, this function setup the config on the .rc file of the user 
+// shell Ex.: .bashrc, .zshrc, it's expecting that the this file is in your home, it will
+// not create the file if it doesn't exist, this could disrupt the config of the user, the
+// user can just pass this script to other file, it just need to be sourced.
 func InitAutocomplete() error {
 	shell := detectShell()
 
@@ -94,12 +102,15 @@ func InitAutocomplete() error {
 	return nil
 }
 
+// detectShell() detects the shell thats currently in use and returns the name of it.
 func detectShell() string {
 	shell := os.Getenv("SHELL")
 	return filepath.Base(shell)
 }
 
-func AutocompleteExists() (bool, error){
+// AutocompleteExists() check to see if the autocomplete script already exist on the .rc
+// file.
+func AutocompleteExists() (bool, error) {
 	shell := detectShell()
 
 	var rc_file string
@@ -125,3 +136,12 @@ func AutocompleteExists() (bool, error){
 
 	return false, fmt.Errorf("Couldn't find the rc file.")
 }
+
+/*
+INDEX:
+const BASH_COMP_SCRIPT
+const ZSH_COMP_SCRIPT
+func InitAutocomplete() error
+func detectShell() string 
+func AutocompleteExists() (bool, error)
+*/
