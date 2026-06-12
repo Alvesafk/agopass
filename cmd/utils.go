@@ -30,6 +30,7 @@ func PrintUsage(args []string) {
 	fmt.Println("Get / get / G / g       :: Get the secret key.")
 	fmt.Println("Update / update / U / u :: Modify a registered secret.")
 	fmt.Println("Make / make / M / m     :: Create a random 32 bit key.")
+	fmt.Println("Auto / auto / Au / au   :: Setup autocomplete.")
 }
 
 // Check the amount of arguments passed on a args string slice, usually on the commands

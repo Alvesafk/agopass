@@ -11,6 +11,7 @@ package main
 
 import (
 	// Std go lib.
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -72,6 +73,11 @@ func main() {
 		cmd.Version()
 	case "Make", "make", "M", "m":
 		cmd.Make()
+	case "Auto", "auto", "Au", "au":
+		if err = cmd.InitAutocomplete(); err != nil {
+			fmt.Println("Error: ", err)
+			return
+		}
 	default:
 		cmd.PrintUsage(args)
 		log.Fatal("Invalid command, try again")

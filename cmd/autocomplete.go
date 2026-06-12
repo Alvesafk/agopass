@@ -14,7 +14,7 @@ _agopass_completion() {
 	cur="${COMP_WORDS[COMP_CWORD]}"
 	prev="${COMP_WORDS[COMP_CWORD-1]}"
 
-	local commands="init add list delete get update make"
+	local commands="init add list delete get update make autocomplete"
 
 	if [[ $COMP_CWORD -eq 1 ]]; then
 		COMPREPLY=($(compgen -W "$commands" -- "$cur"))
@@ -35,6 +35,7 @@ _agopass_completion() {
 		'get:Get the secret key'
 		'update:Modify a registered secret'
 		'make:Create a random 32 bit key'
+		'auto':Setup autocomplete'
 	)
 
 	if [[ $CURRENT -eq 2 ]]; then
