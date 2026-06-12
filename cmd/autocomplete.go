@@ -65,7 +65,7 @@ func InitAutocomplete() error {
 	marker := "# agopass-completion"
 	content, err := os.ReadFile(rc_file)
 	if err != nil {
-		return fmt.Errorf("Error: ", err)
+		return fmt.Errorf("Error: %s", err)
 	}
 
 	if strings.Contains(string(content), marker) {
@@ -96,4 +96,31 @@ func InitAutocomplete() error {
 func detectShell() string {
 	shell := os.Getenv("SHELL")
 	return filepath.Base(shell)
+}
+
+func AutocompleteExists() (bool, error){
+	shell := detectShell()
+
+	var rc_file string
+	switch shell {
+	case "bash":
+		rc_file = os.ExpandEnv("$home/.bashrc")
+	case "zsh":
+		rc_file = os.ExpandEnv("$home/.zshrc")
+	default:
+		return false, fmt.Errorf("%s shell is not suported", shell)
+	}
+
+	marker := "# agopass-completion"
+	content, err := os.ReadFile(rc_file)
+	if err != nil {
+		return false, fmt.Errorf("Error: %s", err)
+	}
+
+	if strings.Contains(string(content), marker) {
+		fmt.Println("Autocomplete is already configured.")
+		return true, nil
+	}
+
+	return false, fmt.Errorf("Couldn't find the rc file.")
 }
