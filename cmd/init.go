@@ -90,6 +90,26 @@ func Init(db storage.DB) {
 		fmt.Print(color.Red("Was not possible to verify existance of master key on DB, aborting", "bold", 1))	
 		os.Exit(1)
 	}
+
+	fmt.Println("Want to setup the autocomplete script? It will autocomplete the commands for you when you press <tab>")
+	fmt.Println("Note: It WILL be appended to yout .rc (.bashrc, .zshrc), you can take this script to another file and source it, or leave it there.")
+	fmt.Print(color.Yellow("Knowing this, you want to setup the autocomplete script? y/N : ", "bold", 0))
+
+	reader := bufio.NewReader(os.Stdin)
+	response, err := reader.ReadString('\n')
+	if err != nil {
+		fmt.Print(color.Red("Could not read the response input.", "bold", 1))
+		os.Exit(1)
+	}
+
+	switch strings.TrimSpace(response) {
+	case "Yes", "YES", "yes", "Y", "y":
+		if err := InitAutocomplete(); err != nil {
+			fmt.Println("Error: ", err)
+		}
+	default:
+		fmt.Println("Ok! Autocomplete was NOT setup.")
+	}
 }
 
 /*
