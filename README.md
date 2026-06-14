@@ -60,6 +60,7 @@ After you created your **Master Key** you can use the other commands, in this mo
 This is the project for now, some features that i want to work next:
 - [x] Update command to update or change the registered key.
 - [x] Autocomplete scripts, for auto completing the commands.
+- [ ] Rewrite into a TUI.
 - [ ] A way to export and import the DB, without just copying the DB binary.
 
 Thanks for your attention, Alvesafk.
