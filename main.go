@@ -22,6 +22,7 @@ import (
 	"github.com/Alvesafk/agopass/storage"
 )
 
+// TODO :: rewrite the program with bubble tea TUI framework.
 func main() {
 	// Getting the args, if it's less then 2, print the usage of agopass and kill the
 	// program. (It's less than 2 when the user just prompts <agopass> alone.
