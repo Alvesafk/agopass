@@ -10,76 +10,125 @@ DB and prompt you to create your Master Password, the only password you'l need t
 package main
 
 import (
-	// Std go lib.
 	"fmt"
 	"log"
 	"os"
 	"path/filepath"
 
-	// Libs made by me
-	// This one is for the commands, all of the real work happens there.
 	"github.com/Alvesafk/agopass/cmd"
-	// This one is for the DB management, create a db, connect to it, encrypt text, etc...
 	"github.com/Alvesafk/agopass/storage"
+
+	tea "charm.land/bubbletea/v2"
 )
 
+var (
+	commands = []string{"Add secret", "List secrets", "Get secret", "Update secret", "Make secret"}
+	args = os.Args
+)
+
+type choice_model struct {
+	choices []string
+	cursor int
+	selected string
+}
+
+func InitModel() choice_model {
+	return choice_model{
+		choices: commands,
+	}
+}
+
+func (cm choice_model) Init() tea.Cmd {
+	return nil
+}
+
+func (cm choice_model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.KeyPressMsg:
+		switch msg.String() {
+		case "ctrl+c", "q":
+			return cm, tea.Quit
+
+		case "up", "k":
+			if cm.cursor > 0 {
+				cm.cursor--
+			}
+
+		case "down", "j":
+			if cm.cursor < len(cm.choices) - 1 {
+				cm.cursor++
+			}
+
+		case "enter", "space":
+			cm.selected = cm.choices[cm.cursor]
+		}
+	}
+
+	if len(cm.selected) > 0 {
+		home, err := os.UserHomeDir()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		db_path := filepath.Join(home, ".agopass", "secrets.db")
+		err = os.MkdirAll(filepath.Dir(db_path), 0755)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		db, err := storage.New(db_path)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer func() {
+			if err = db.Close(); err != nil {
+				log.Println(err)
+			}
+		}()
+
+		switch cm.selected {
+		case commands[0]:
+			
+		}
+
+		switch cm.selected {
+		case commands[0]:
+			cmd.Add(*db, args)
+		case commands[1]:
+			cmd.List(*db)
+		case commands[2]:
+			cmd.Get(*db, args)
+		case commands[3]:
+			cmd.Update(*db, args)
+		case commands[4]:
+			cmd.Make()
+		}
+	}
+
+	return cm, nil
+}
+
+func (cm choice_model) View() tea.View {
+	s := "Agopass secrets manager\n\n"
+
+	for i, choice := range cm.choices {
+		cursor := " "
+		if cm.cursor == i {
+			cursor = ">"
+		}
+
+		s += fmt.Sprintf("%s %s\n", cursor, choice)
+	}
+
+	s += "\nPress q to quit.\n"
+
+	return tea.NewView(s)
+}
+
 func main() {
-	// Getting the args, if it's less then 2, print the usage of agopass and kill the
-	// program. (It's less than 2 when the user just prompts <agopass> alone.
-	args := os.Args
-	if len(args) < 2 {
-		cmd.PrintUsage(args)
+	p := tea.NewProgram(InitModel())
+	if _, err := p.Run(); err != nil {
+		fmt.Printf("Error: %v", err)
 		os.Exit(1)
-	}
-
-	// Get's the home dir of the user to create the: application folder and them the DB.
-	home, _ := os.UserHomeDir()
-	db_path := filepath.Join(home, ".agopass", "secrets.db")
-	err := os.MkdirAll(filepath.Dir(db_path), 0755)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// storage.New() is a function that creates a connection with the existing DB, it
-	// also creates the DB does not exist when the program it's called.
-	db, err := storage.New(db_path)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer func() {
-		if err = db.Close(); err != nil {
-			log.Print(err)
-		}
-	}()
-
-	// Switch to get what user want to do, i could have used Cobra or something like
-	// that, but i prefer doing it myself, i believe aswell that CLI should be simple
-	// and i don't think excessive amounts of flags really help on your application
-	// so that's why agopass have now flags whatsoever, for now at least.
-	switch args[1] {
-	case "Init", "init", "I", "i":
-		cmd.Init(*db)
-	case "Add", "add", "A", "a":
-		cmd.Add(*db, args)
-	case "List", "list", "L", "l":
-		cmd.List(*db)
-	case "Delete", "delete", "D", "d":
-		cmd.Delete(*db, args)
-	case "Get", "get", "G", "g":
-		cmd.Get(*db, args)
-	case "Update", "update", "U", "u":
-		cmd.Update(*db, args)
-	case "Version", "version", "V", "v":
-		cmd.Version()
-	case "Make", "make", "M", "m":
-		cmd.Make()
-	case "Auto", "auto", "Au", "au":
-		if err = cmd.InitAutocomplete(); err != nil {
-			fmt.Println("Error: ", err)
-			return
-		}
-	default:
-		cmd.PrintUsage(args)
-		log.Fatal("Invalid command, try again")
 	}
 }
