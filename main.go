@@ -23,18 +23,43 @@ import (
 
 var (
 	commands = []string{"Add secret", "List secrets", "Get secret", "Update secret", "Make secret"}
-	args = os.Args
+	args     = os.Args
 )
 
 type choice_model struct {
-	choices []string
-	cursor int
+	choices  []string
+	cursor   int
 	selected string
+
+	db storage.DB
 }
 
 func InitModel() choice_model {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	db_path := filepath.Join(home, ".agopass", "secrets.db")
+	err = os.MkdirAll(filepath.Dir(db_path), 0755)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	db, err := storage.New(db_path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func() {
+		if err = db.Close(); err != nil {
+			log.Println(err)
+		}
+	}()
+
 	return choice_model{
+
 		choices: commands,
+		db:      *db,
 	}
 }
 
@@ -55,7 +80,7 @@ func (cm choice_model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 
 		case "down", "j":
-			if cm.cursor < len(cm.choices) - 1 {
+			if cm.cursor < len(cm.choices)-1 {
 				cm.cursor++
 			}
 
@@ -65,41 +90,15 @@ func (cm choice_model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	if len(cm.selected) > 0 {
-		home, err := os.UserHomeDir()
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		db_path := filepath.Join(home, ".agopass", "secrets.db")
-		err = os.MkdirAll(filepath.Dir(db_path), 0755)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		db, err := storage.New(db_path)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer func() {
-			if err = db.Close(); err != nil {
-				log.Println(err)
-			}
-		}()
-
 		switch cm.selected {
 		case commands[0]:
-			
-		}
-
-		switch cm.selected {
-		case commands[0]:
-			cmd.Add(*db, args)
+			cmd.Add(cm.db, args)
 		case commands[1]:
-			cmd.List(*db)
+			cmd.List(cm.db)
 		case commands[2]:
-			cmd.Get(*db, args)
+			cmd.Get(cm.db, args)
 		case commands[3]:
-			cmd.Update(*db, args)
+			cmd.Update(cm.db, args)
 		case commands[4]:
 			cmd.Make()
 		}
