@@ -10,12 +10,12 @@ import (
 	"os"
 	"strings"
 
-	"github.com/peterh/liner"
 	"github.com/Alvesafk/agopass/color"
 	"github.com/Alvesafk/agopass/storage"
+	"github.com/peterh/liner"
 )
 
-// Update function receives a DB connection and the arguments string array, it returns 
+// Update function receives a DB connection and the arguments string array, it returns
 // nothing.
 func Update(db storage.DB, args []string) {
 	// Check the amount of arguments, it must be 3.

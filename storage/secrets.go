@@ -10,9 +10,9 @@ import (
 
 // Secret struct, they are equal to what the rows of the DB save.
 type Secret struct {
-	ID int
-	Name string 
-	Key string
+	ID         int
+	Name       string
+	Key        string
 	Key_Length int
 }
 
@@ -30,7 +30,7 @@ func (db *DB) Insert(name, key string, mk []byte) (int64, error) {
 	res, err := db.conn.Exec(
 		`INSERT INTO secrets (name, key, key_length) VALUES (?, ?, ?)`,
 		name, encrypted_key, len(key),
-		)
+	)
 	if err != nil {
 		return 0, err
 	}
@@ -66,7 +66,7 @@ func (db *DB) GetByName(name string) (*Secret, error) {
 	err := db.conn.QueryRow(
 		`SELECT id, name, key, key_length FROM secrets WHERE name = ?`,
 		name,
-		).Scan(&s.ID, &s.Name, &s.Key, &s.Key_Length)
+	).Scan(&s.ID, &s.Name, &s.Key, &s.Key_Length)
 
 	if err == sql.ErrNoRows {
 		return nil, fmt.Errorf("Secret %q not found.", name)
@@ -84,7 +84,7 @@ func (db *DB) Delete(id int) error {
 	return err
 }
 
-// Update function method accepts a id of the row that will be changed, a Secret Struct 
+// Update function method accepts a id of the row that will be changed, a Secret Struct
 // with the new content and the master key in order to encrypt key if needed, return error
 // if any.
 func (db *DB) Update(id_to_change int, new_secret Secret, mk []byte) error {
@@ -99,14 +99,14 @@ func (db *DB) Update(id_to_change int, new_secret Secret, mk []byte) error {
 	return err
 }
 
-// AddMasterKey hash the argument passed and insert it into the 'config' table, returns it's 
+// AddMasterKey hash the argument passed and insert it into the 'config' table, returns it's
 // id if no error.
 func (db *DB) AddMasterKey(key string) (int64, error) {
 	hashed_key := HashMasterKey(key)
 	res, err := db.conn.Exec(
 		`INSERT INTO config (name, key) VALUES (?, ?)`,
 		"master_key", hashed_key,
-		)
+	)
 	if err != nil {
 		return 0, err
 	}
@@ -120,7 +120,7 @@ func (db *DB) GetHashedMasterKey() (*Secret, error) {
 	err := db.conn.QueryRow(
 		`SELECT id, name, key FROM config WHERE name = ?`,
 		"master_key",
-		).Scan(&mk.ID, &mk.Name, &mk.Key)
+	).Scan(&mk.ID, &mk.Name, &mk.Key)
 
 	if err == sql.ErrNoRows {
 		return nil, fmt.Errorf("Secret master key not found.")
@@ -138,7 +138,7 @@ func (db *DB) MasterKeyExists() (bool, error) {
 	err := db.conn.QueryRow(
 		`SELECT id, name, key FROM config WHERE name = ?`,
 		"master_key",
-		).Scan(&mk.ID, &mk.Name, &mk.Key)
+	).Scan(&mk.ID, &mk.Name, &mk.Key)
 
 	if err == sql.ErrNoRows {
 		return false, sql.ErrNoRows
@@ -155,7 +155,7 @@ Index:
 type Secret struct
 func (db *DB) Insert(name, key string, mk []byte) (int64, error)
 func (db *DB) List() ([]Secret, error)
-func (db *DB) GetByName(name string) (*Secret, error) 
+func (db *DB) GetByName(name string) (*Secret, error)
 func (db *DB) Delete(id int) error
 func (db *DB) Update(id_to_change int, new_secret Secret, mk []byte) error
 func (db *DB) AddMasterKey(key string) (int64, error)

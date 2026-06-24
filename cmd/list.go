@@ -15,7 +15,7 @@ import (
 
 // List function, accepts a DB connection.
 func List(db storage.DB) {
-	// db.List() method does not have any argument (only the implicit DB one), the 
+	// db.List() method does not have any argument (only the implicit DB one), the
 	// method returns a slice of initialized Secret structs.
 	all_secrets, err := db.List()
 	if err != nil {

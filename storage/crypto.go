@@ -21,7 +21,7 @@ func HashMasterKey(mk string) []byte {
 }
 
 // Encrypt function accept plain_text and the master key hash, the later will be used as
-// salt on the encryption, therefore the only key that can decrypt it is the one that 
+// salt on the encryption, therefore the only key that can decrypt it is the one that
 // encrypted on the first place.
 func Encrypt(plain_text string, key []byte) (string, error) {
 	block, err := aes.NewCipher(key)
@@ -39,7 +39,7 @@ func Encrypt(plain_text string, key []byte) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	
+
 	cipher_text := gcm.Seal(nonce, nonce, []byte(plain_text), nil)
 
 	return base64.StdEncoding.EncodeToString(cipher_text), nil

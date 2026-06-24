@@ -52,7 +52,7 @@ compdef _agopass_completion agopass
 	`
 )
 
-// Main autocomplete function, this function setup the config on the .rc file of the user 
+// Main autocomplete function, this function setup the config on the .rc file of the user
 // shell Ex.: .bashrc, .zshrc, it's expecting that the this file is in your home, it will
 // not create the file if it doesn't exist, this could disrupt the config of the user, the
 // user can just pass this script to other file, it just need to be sourced.
@@ -86,7 +86,7 @@ func InitAutocomplete() error {
 	if err != nil {
 		return err
 	}
-	defer func (){
+	defer func() {
 		if err = f.Close(); err != nil {
 			fmt.Println("Error on closing the rc file.")
 		}
@@ -142,6 +142,6 @@ INDEX:
 const BASH_COMP_SCRIPT
 const ZSH_COMP_SCRIPT
 func InitAutocomplete() error
-func detectShell() string 
+func detectShell() string
 func AutocompleteExists() (bool, error)
 */

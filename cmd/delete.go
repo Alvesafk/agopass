@@ -8,8 +8,8 @@ package cmd
 import (
 	"bufio"
 	"fmt"
-	"strings"
 	"os"
+	"strings"
 
 	"github.com/Alvesafk/agopass/color"
 	"github.com/Alvesafk/agopass/storage"
@@ -74,7 +74,7 @@ func Delete(db storage.DB, args []string) {
 
 	default:
 		fmt.Printf(color.White("%s secret was not deleted.", "bold", 1), to_get_secret.Name)
-		return 
+		return
 	}
 }
 

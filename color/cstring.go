@@ -64,6 +64,7 @@ func Blue(s, mod string, escape int) string   { return colorize(s, mod, cBlue, e
 func Purple(s, mod string, escape int) string { return colorize(s, mod, cPurple, escape) }
 func Cyan(s, mod string, escape int) string   { return colorize(s, mod, cCyan, escape) }
 func White(s, mod string, escape int) string  { return colorize(s, mod, cWhite, escape) }
+
 /*
 func AddMod(s, mod string) string
 func Red(s string, mod string, escape int) string

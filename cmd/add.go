@@ -10,9 +10,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/peterh/liner"
 	"github.com/Alvesafk/agopass/color"
 	"github.com/Alvesafk/agopass/storage"
+	"github.com/peterh/liner"
 )
 
 // Add function, it receives a DB connection.
@@ -33,10 +33,10 @@ func Add(db storage.DB, args []string) {
 	if len(args) > 2 {
 		line := liner.NewLiner()
 		name, _ = line.PromptWithSuggestion("New name: ", args[2], -1)
-		line.Close()	
+		line.Close()
 	} else {
 		fmt.Print("Name of the secret: ")
-		name, _= reader.ReadString('\n')
+		name, _ = reader.ReadString('\n')
 	}
 
 	fmt.Print("Secret key: ")
@@ -66,7 +66,7 @@ func Add(db storage.DB, args []string) {
 
 	default:
 		fmt.Print(color.White("Ok! Secret was not registered.", "bold", 1))
-		return 
+		return
 	}
 
 	fmt.Print(color.Green("Secret was saved!", "bold", 1))

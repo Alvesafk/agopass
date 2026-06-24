@@ -61,7 +61,7 @@ func IsMasterKeyHash(db storage.DB, s string) (bool, error) {
 	if err != nil {
 		return false, fmt.Errorf("Master key does not exist.")
 	}
-	
+
 	mk, err := db.GetHashedMasterKey()
 	if err != nil {
 		return false, fmt.Errorf("Could not get master key.")
@@ -89,7 +89,7 @@ func Authenticate(db storage.DB) []byte {
 
 	for range MAX_PASSWORD_RETRIES {
 		fmt.Print(color.White("Enter with your master key: ", "bold", 0))
-		password, err := term.ReadPassword(int(syscall.Stdin)) 
+		password, err := term.ReadPassword(int(syscall.Stdin))
 		if err != nil {
 			fmt.Print(color.Red("Could not read the password input.", "bold", 1))
 			os.Exit(1)
@@ -150,12 +150,12 @@ func CheckArgumentSpelling(args []string, db storage.DB) (storage.Secret, error)
 		if this_count > compare_count && this_count > 0 {
 			compare_count = this_count
 			probable_secret = index
-		} 	
+		}
 	}
 
 	if compare_count <= 0 {
 		return storage.Secret{}, fmt.Errorf("Query wasn't close to anything in db.")
-	}	
+	}
 
 	return all_secrets[probable_secret], nil
 }
@@ -194,6 +194,6 @@ func IsMasterKeyHash(db storage.DB, s string) (bool, error
 func Authenticate(db storage.DB) []byte
 func CheckArgumentSpelling(args []string, db storage.DB) (storage.Secret, error)
 func sessionFile() string
-func saveTmpHash(hash []byte) error 
+func saveTmpHash(hash []byte) error
 func loadTmpHash() ([]byte, error)
 */

@@ -20,7 +20,7 @@ import (
 // consts, CHARS is the string used to generate the random key, DEFAULT_LENGTH is the len
 // of the generated key.
 const (
-	CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*(),.<>;:/?{}[]"
+	CHARS          = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*(),.<>;:/?{}[]"
 	DEFAULT_LENGTH = 32
 )
 
