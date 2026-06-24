@@ -3,7 +3,7 @@ Author © 2026 alvesafk <migueldealmeidaalves55@gmail.com>
 
 Agopass (formerly gopass but someone had already stole my flow) is a CLI Password manager
 made in Go, it uses a SQLite db located on this path /home/<user>/.agopass/, all the
-contentes of the DB are hashed or encrypted, it's simple to use, few commands but it gets
+contents of the DB are hashed or encrypted, it's simple to use, few commands but it gets
 the job done, to start with agopass you have to run <agopass init>, that will create the
 DB and prompt you to create your Master Password, the only password you'l need to remember!
 */

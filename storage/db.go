@@ -1,5 +1,5 @@
 /*
-The Storage package is what handles all the DB operations, begining by creating and migrating
+The Storage package is what handles all the DB operations, beginning by creating and migrating
 it to Insertions and Deletes.
 */
 package storage

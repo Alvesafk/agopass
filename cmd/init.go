@@ -1,7 +1,7 @@
 /*
 This is the first stop on the cmd package, is also the first command that should be run
 when using agopass, with it you define you Master Key, the only password that you 
-need to remmeber, this password is prompted whenever you want to use a command that
+need to remember, this password is prompted whenever you want to use a command that
 MODIFIES the content of DB, that means, List command will not need the auth via master key
 because it doesn't change anything on the DB, it doesn't show the password either, just
 the name with a mock hidden passwords, to get your password you use the command Get, this
@@ -9,7 +9,7 @@ is one that needs auth, the following commands need Auth : add, get, delete. Aut
 be called before this functions, after you use Init atleas one time, you can forget it
 exists, you will not be able to change your password, because the encryption of you other 
 keys is done using the Master Key hash as salt, so if you forget you better of just 
-removing the DB out of existance, than you can start over again.
+removing the DB out of existence, than you can start over again.
 */
 package cmd
 
@@ -87,7 +87,7 @@ func Init(db storage.DB) {
 		os.Exit(0)
 	// Normal error if something strange go wrong for whatever reason.
 	default:
-		fmt.Print(color.Red("Was not possible to verify existance of master key on DB, aborting", "bold", 1))	
+		fmt.Print(color.Red("Was not possible to verify existence of master key on DB, aborting", "bold", 1))	
 		os.Exit(1)
 	}
 

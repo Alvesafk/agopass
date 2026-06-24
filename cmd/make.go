@@ -1,6 +1,6 @@
 /*
 The Make command creates a random 32 bit long key, if you compile it from source you can
-change the lenght, will add this eventually, the command uses the crypto/rand package to
+change the length, will add this eventually, the command uses the crypto/rand package to
 generate random numbers, crypto is used because it generates ranmdom numbers using a lot
 of entropy, making the 'randomnes' true, is not biased as well.
 */
@@ -17,11 +17,11 @@ import (
 	"github.com/atotto/clipboard"
 )
 
-// consts, CHARS is the string used to generate the random key, DEFAULT_LENGHT is the len
+// consts, CHARS is the string used to generate the random key, DEFAULT_LENGTH is the len
 // of the generated key.
 const (
 	CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*(),.<>;:/?{}[]"
-	DEFAULT_LENGHT = 32
+	DEFAULT_LENGTH = 32
 )
 
 // Make function receives nothing and return nothing, it generate the random key and paste
@@ -30,9 +30,9 @@ func Make() {
 	fmt.Print(color.AddMod("Making a new random key, putting on your clipboard.\n", "bold"))
 
 	var sb strings.Builder
-	sb.Grow(DEFAULT_LENGHT)
+	sb.Grow(DEFAULT_LENGTH)
 
-	for range DEFAULT_LENGHT {
+	for range DEFAULT_LENGTH {
 		i, _ := rand.Int(rand.Reader, big.NewInt(int64(len(CHARS))))
 
 		sb.WriteByte(CHARS[i.Int64()])
@@ -51,6 +51,6 @@ func Make() {
 
 /*
 const CHARS string
-const DEFAULT_LENGHT int
+const DEFAULT_LENGTH int
 func Make()
 */

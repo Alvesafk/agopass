@@ -1,6 +1,6 @@
 /*
 List command shows all secrets that are registered on the DB, the keys that it shows are
-just a mock based on the lenght of the plain text key, therefore the user does not need to
+just a mock based on the length of the plain text key, therefore the user does not need to
 authenticate before using it.
 */
 package cmd
@@ -39,7 +39,7 @@ func List(db storage.DB) {
 	}
 }
 
-// hide password function accepts a integer representing the lenght of the password, the
+// hide password function accepts a integer representing the length of the password, the
 // return is a string made of '*'. Ex.: Pass123 -> len = 7 -> *******
 func hidePassword(kl int) string {
 	// Initialize the result string.
