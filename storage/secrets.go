@@ -69,7 +69,7 @@ func (db *DB) GetByName(name string) (*Secret, error) {
 	).Scan(&s.ID, &s.Name, &s.Key, &s.Key_Length)
 
 	if err == sql.ErrNoRows {
-		return nil, fmt.Errorf("Secret %q not found.", name)
+		return nil, fmt.Errorf("secret %q not found", name)
 	}
 	if err != nil {
 		return nil, err
@@ -123,7 +123,7 @@ func (db *DB) GetHashedMasterKey() (*Secret, error) {
 	).Scan(&mk.ID, &mk.Name, &mk.Key)
 
 	if err == sql.ErrNoRows {
-		return nil, fmt.Errorf("Secret master key not found.")
+		return nil, fmt.Errorf("secret master key not found")
 	}
 	if err != nil {
 		return nil, err

@@ -9,8 +9,8 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/Alvesafk/agopass/color"
 	"github.com/Alvesafk/agopass/storage"
+	"github.com/Alvesafk/scolor/ansi"
 )
 
 // List function, accepts a DB connection.
@@ -19,13 +19,13 @@ func List(db storage.DB) {
 	// method returns a slice of initialized Secret structs.
 	all_secrets, err := db.List()
 	if err != nil {
-		fmt.Print(color.Red("Could not list secrets from db", "bold", 1))
+		ansi.Red.FgPrintln("Error:", err)
 		return
 	}
 
 	// If no secret exist it will tell the user to add them.
 	if len(all_secrets) < 1 {
-		fmt.Print(color.Red("No secret registered! Use <gopass add> to add secrets.", "bold", 1))
+		ansi.Red.FgPrintln("No secret registered! Use <gopass add> to add secrets.")
 		return
 	}
 

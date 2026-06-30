@@ -16,10 +16,7 @@ import (
 	"os"
 	"path/filepath"
 
-	// Libs made by me
-	// This one is for the commands, all of the real work happens there.
 	"github.com/Alvesafk/agopass/cmd"
-	// This one is for the DB management, create a db, connect to it, encrypt text, etc...
 	"github.com/Alvesafk/agopass/storage"
 )
 

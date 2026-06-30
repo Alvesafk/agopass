@@ -12,8 +12,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Alvesafk/agopass/color"
 	"github.com/Alvesafk/agopass/storage"
+	"github.com/Alvesafk/scolor/ansi"
 	"github.com/atotto/clipboard"
 )
 
@@ -36,10 +36,10 @@ func Get(db storage.DB, args []string) {
 			os.Exit(1)
 		}
 
-		fmt.Printf(color.Yellow("Wasn't able to retrieve a exact match, did you mean %s? y/N : ", "bold", 0), probable_secret.Name)
+		ansi.Yellow.FgPrintf("Wasn't able to retrieve a exact match, did you mean %s? y/N : ", probable_secret.Name)
 		response, err := reader.ReadString('\n')
 		if err != nil {
-			fmt.Print(color.Red("Wasn't able to retrieve the reponse input, aborting.", "bold", 1))
+			ansi.Red.FgPrintln("Error:", err)
 			os.Exit(1)
 		}
 
@@ -67,7 +67,7 @@ func Get(db storage.DB, args []string) {
 		os.Exit(1)
 	}
 
-	fmt.Printf(color.Green("Success! %s key is in your clipboard.", "bold", 1), to_get_secret.Name)
+	ansi.Green.FgPrintf("Success! $s key is in your clipboard.\n", to_get_secret.Name)
 }
 
 /*

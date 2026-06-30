@@ -11,8 +11,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Alvesafk/agopass/color"
 	"github.com/Alvesafk/agopass/storage"
+	"github.com/Alvesafk/scolor"
+	"github.com/Alvesafk/scolor/ansi"
 )
 
 // Delete function, receives a db connection and the arguments.
@@ -35,10 +36,10 @@ func Delete(db storage.DB, args []string) {
 			os.Exit(1)
 		}
 
-		fmt.Printf(color.Yellow("Wasn't able to retrieve a exact match, did you mean %s? y/N : ", "bold", 0), probable_secret.Name)
+		ansi.Yellow.FgPrintf("Wasn't able to retrieve a exact match, did you mean %s? y/N : ", probable_secret.Name)
 		response, err := reader.ReadString('\n')
 		if err != nil {
-			fmt.Print(color.Red("Wasn't able to retrieve the reponse input, aborting.", "bold", 1))
+			ansi.Red.FgPrintln("Error:", err)
 			os.Exit(1)
 		}
 
@@ -65,15 +66,16 @@ func Delete(db storage.DB, args []string) {
 		// that's why we first need to get the secret struct.
 		err = db.Delete(to_get_secret.ID)
 		if err != nil {
-			fmt.Printf(color.Red("Error: Could not delete %s.", "bold", 1), to_get_secret.Name)
+			ansi.Red.BgPrintln("Error:", err)
 			fmt.Println(err)
 			return
 		}
 
-		fmt.Printf(color.Green("Success! %s secret was deleted.", "bold", 1), to_get_secret.Name)
+		ansi.Green.FgPrintf("Success! %s secret was deleted.\n", to_get_secret.Name)
 
 	default:
-		fmt.Printf(color.White("%s secret was not deleted.", "bold", 1), to_get_secret.Name)
+		fmt.Printf(scolor.AddMod("%s secret was not deleted.", scolor.Bold), to_get_secret.Name)
+
 		return
 	}
 }

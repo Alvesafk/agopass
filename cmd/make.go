@@ -13,7 +13,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Alvesafk/agopass/color"
+	"github.com/Alvesafk/scolor"
+	"github.com/Alvesafk/scolor/ansi"
 	"github.com/atotto/clipboard"
 )
 
@@ -27,7 +28,7 @@ const (
 // Make function receives nothing and return nothing, it generate the random key and paste
 // it on your clipboard.
 func Make() {
-	fmt.Print(color.AddMod("Making a new random key, putting on your clipboard.\n", "bold"))
+	fmt.Println(scolor.AddMod("Making a new random key, putting on your clipboard.", scolor.Bold))
 
 	var sb strings.Builder
 	sb.Grow(DEFAULT_LENGTH)
@@ -46,7 +47,7 @@ func Make() {
 		os.Exit(1)
 	}
 
-	fmt.Print(color.Green("Success! New random key is in your clipboard.", "bold", 1))
+	ansi.Green.FgPrintln("Success! New random key is in your clipboard.")
 }
 
 /*

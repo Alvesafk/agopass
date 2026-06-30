@@ -10,8 +10,9 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/Alvesafk/agopass/color"
 	"github.com/Alvesafk/agopass/storage"
+	"github.com/Alvesafk/scolor"
+	"github.com/Alvesafk/scolor/ansi"
 	"golang.org/x/term"
 )
 
@@ -41,13 +42,13 @@ func CheckAmountArguments(args []string) {
 	l := len(args)
 	if l != 3 {
 		if l > 3 {
-			fmt.Print(color.Red("Error: Too many arguments.", "bold", 1))
+			ansi.Red.FgPrintln("Error: Too many arguments.")
 			PrintUsage(args)
 			os.Exit(1)
 		}
 
 		if l < 3 {
-			fmt.Print(color.Red("Error: Missing arguments.", "bold", 1))
+			ansi.Red.FgPrintln("Error: Missing arguments.")
 			PrintUsage(args)
 			os.Exit(1)
 		}
@@ -59,12 +60,12 @@ func CheckAmountArguments(args []string) {
 func IsMasterKeyHash(db storage.DB, s string) (bool, error) {
 	_, err := db.MasterKeyExists()
 	if err != nil {
-		return false, fmt.Errorf("Master key does not exist.")
+		return false, fmt.Errorf("master key does not exist")
 	}
 
 	mk, err := db.GetHashedMasterKey()
 	if err != nil {
-		return false, fmt.Errorf("Could not get master key.")
+		return false, fmt.Errorf("could not get master key")
 	}
 
 	return mk.Key == string(storage.HashMasterKey(s)), nil
@@ -82,30 +83,30 @@ func Authenticate(db storage.DB) []byte {
 
 	_, err = db.MasterKeyExists()
 	if err != nil {
-		fmt.Print(color.Red("Master key does not exist! Use <gopass init> to add a master key.", "bold", 1))
+		ansi.Red.FgPrintln("Master key does not exist! Use <gopass init> to add a master key.")
 		os.Exit(1)
 		return nil
 	}
 
 	for range MAX_PASSWORD_RETRIES {
-		fmt.Print(color.White("Enter with your master key: ", "bold", 0))
+		fmt.Print(scolor.AddMod("Enter with your master key: ", scolor.Bold))
 		password, err := term.ReadPassword(int(syscall.Stdin))
 		if err != nil {
-			fmt.Print(color.Red("Could not read the password input.", "bold", 1))
+			ansi.Red.FgPrintln("Error:", err)
 			os.Exit(1)
 		}
 
 		is, err := IsMasterKeyHash(db, strings.TrimSpace(string(password)))
 		if err != nil {
-			fmt.Print(color.Red("Could not access master key from db", "bold", 1))
+			ansi.Red.FgPrintln("Error:", err)
 			os.Exit(1)
 		}
 
 		if !is {
-			fmt.Print(color.Red("Input doesn't match master key.", "bold", 1))
+			ansi.Red.FgPrintln("Input doesn't match master key.")
 			continue
 		} else {
-			fmt.Print(color.Green("Authenticated.", "underline", 1))
+			ansi.Green.FgPrintln("Authenticated.")
 			hashed_mk := storage.HashMasterKey(string(password))
 
 			err = saveTmpHash(hashed_mk)
@@ -118,7 +119,7 @@ func Authenticate(db storage.DB) []byte {
 		}
 	}
 
-	fmt.Print(color.Red("Could not authenticate, aborting.", "bold", 1))
+	ansi.Red.FgPrintln("Could not authenticate, aborting.")
 	os.Exit(1)
 	return nil
 }
@@ -154,7 +155,7 @@ func CheckArgumentSpelling(args []string, db storage.DB) (storage.Secret, error)
 	}
 
 	if compare_count <= 0 {
-		return storage.Secret{}, fmt.Errorf("Query wasn't close to anything in db.")
+		return storage.Secret{}, fmt.Errorf("query wasn't close to anything in db")
 	}
 
 	return all_secrets[probable_secret], nil

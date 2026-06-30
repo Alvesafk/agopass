@@ -23,8 +23,8 @@ import (
 
 	// Color lib is for easier colored strings withou the need to manually add every
 	// escape sequence in history.
-	"github.com/Alvesafk/agopass/color"
 	"github.com/Alvesafk/agopass/storage"
+	"github.com/Alvesafk/scolor/ansi"
 	"golang.org/x/term"
 )
 
@@ -43,13 +43,12 @@ func Init(db storage.DB) {
 		// color that can be made with escape sequences on print, you first put
 		// your string, than a "mod", like bold or undeline, and the amount of new
 		// lines on the end of the string.
-		fmt.Print(color.Green("No master key was found, create one: ", "bold", 0))
+		ansi.Green.FgPrintln("No master key was found, create one: ")
 		// term.ReadPassword it's used to disable the echo, therefore when you type
 		// your password nothing is shown.
 		mk, err := term.ReadPassword(int(syscall.Stdin))
 		if err != nil {
-			fmt.Println()
-			fmt.Print(color.Red("Could not read the master key input.", "bold", 1))
+			ansi.Red.FgPrintln("\nError:", err)
 			os.Exit(1)
 		}
 		fmt.Println()
@@ -58,10 +57,10 @@ func Init(db storage.DB) {
 		fmt.Println("This key will be used before the <add/delete/get> commands.")
 		fmt.Printf("Make sure you don't forget it! =D\n\n")
 
-		fmt.Print(color.Yellow("Knowing this, are you sure that is the password you want to define? y/N : ", "bold", 0))
+		ansi.Yellow.FgPrint("Knowing this, are you sure that this is the password you want to define? y/N : ")
 		response, err := reader.ReadString('\n')
 		if err != nil {
-			fmt.Print(color.Red("Could not read the response input.", "bold", 1))
+			ansi.Red.FgPrintln("Error:", err)
 			os.Exit(1)
 		}
 
@@ -71,11 +70,11 @@ func Init(db storage.DB) {
 			// that is passed, it will hash before adding to DB.
 			_, err = db.AddMasterKey(strings.TrimSpace(string(mk)))
 			if err != nil {
-				fmt.Print(color.Red("Could not save the master key, try again.", "bold", 1))
+				ansi.Red.FgPrintln("Error:", err)
 				os.Exit(1)
 			}
 
-			fmt.Print(color.Green("Master key was saved on the DB!", "bold", 1))
+			ansi.Green.FgPrintln("Master key was saved on the DB!")
 		default:
 			fmt.Println("Ok, Master key was not saved!")
 			os.Exit(0)
@@ -83,11 +82,11 @@ func Init(db storage.DB) {
 	// This case happens when no error is returned from MasterKeyExists(), it means
 	// that the key already exists.
 	case nil:
-		fmt.Print(color.Yellow("Master key is already on the DB, you didn't forget it? Right?", "underline", 1))
+		ansi.Yellow.FgPrintln("Master key is already on the DB, you didn't forget it? Right?")
 		os.Exit(0)
 	// Normal error if something strange go wrong for whatever reason.
 	default:
-		fmt.Print(color.Red("Was not possible to verify existence of master key on DB, aborting", "bold", 1))
+		ansi.Red.FgPrintln("Was not possible to verify existence of master key on DB, aborting.")
 		os.Exit(1)
 	}
 
@@ -101,19 +100,19 @@ func Init(db storage.DB) {
 		fmt.Println()
 		fmt.Println("Want to setup the autocomplete script? It will autocomplete the commands for you when you press <tab>")
 		fmt.Println("Note: It WILL be appended to yout .rc (.bashrc, .zshrc), you can take this script to another file and source it, or leave it there.")
-		fmt.Print(color.Yellow("Knowing this, you want to setup the autocomplete script? y/N : ", "bold", 0))
+		ansi.Yellow.FgPrint("Knowing this, you want to setup the autocomplete script? y/N : ")
 
 		reader := bufio.NewReader(os.Stdin)
 		response, err := reader.ReadString('\n')
 		if err != nil {
-			fmt.Print(color.Red("Could not read the response input.", "bold", 1))
+			ansi.Red.FgPrintln("Error:", err)
 			os.Exit(1)
 		}
 
 		switch strings.TrimSpace(response) {
 		case "Yes", "YES", "yes", "Y", "y":
 			if err := InitAutocomplete(); err != nil {
-				fmt.Println("Error: ", err)
+				ansi.Red.FgPrintln("Error:", err)
 			}
 		default:
 			fmt.Println("Ok! Autocomplete was NOT setup.")

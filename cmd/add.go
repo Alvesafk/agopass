@@ -10,8 +10,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Alvesafk/agopass/color"
 	"github.com/Alvesafk/agopass/storage"
+	"github.com/Alvesafk/scolor"
+	"github.com/Alvesafk/scolor/ansi"
 	"github.com/peterh/liner"
 )
 
@@ -42,7 +43,7 @@ func Add(db storage.DB, args []string) {
 	fmt.Print("Secret key: ")
 	secret, err := reader.ReadString('\n')
 	if err != nil {
-		fmt.Print(color.Red("Could not read the key input.", "bold", 1))
+		ansi.Red.FgPrintln("Error:", err)
 		return
 	}
 
@@ -50,7 +51,8 @@ func Add(db storage.DB, args []string) {
 	fmt.Printf("Are you sure you want to add %s? y/N : ", strings.TrimSpace(name))
 	response, err := reader.ReadString('\n')
 	if err != nil {
-		fmt.Println(err)
+		ansi.Red.FgPrintln("Error:", err)
+		return
 	}
 
 	switch strings.TrimSpace(response) {
@@ -59,17 +61,16 @@ func Add(db storage.DB, args []string) {
 		// new secret.
 		_, err = db.Insert(strings.TrimSpace(name), strings.TrimSpace(secret), mk)
 		if err != nil {
-			fmt.Print(color.Red("Error: Could not insert into DB.", "bold", 1))
-			fmt.Println(err)
+			ansi.Red.FgPrintln("Error:", err)
 			return
 		}
 
 	default:
-		fmt.Print(color.White("Ok! Secret was not registered.", "bold", 1))
+		fmt.Println(scolor.AddMod("Ok! Secret was not registered.", scolor.Bold))
 		return
 	}
 
-	fmt.Print(color.Green("Secret was saved!", "bold", 1))
+	ansi.Green.FgPrintln("Secret was saved!")
 }
 
 /*

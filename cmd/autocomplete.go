@@ -74,7 +74,7 @@ func InitAutocomplete() error {
 	marker := "# agopass-completion"
 	content, err := os.ReadFile(rc_file)
 	if err != nil {
-		return fmt.Errorf("Error: %s", err)
+		return fmt.Errorf("error: %s", err)
 	}
 
 	if strings.Contains(string(content), marker) {
@@ -126,7 +126,7 @@ func AutocompleteExists() (bool, error) {
 	marker := "# agopass-completion"
 	content, err := os.ReadFile(rc_file)
 	if err != nil {
-		return false, fmt.Errorf("Error: %s", err)
+		return false, fmt.Errorf("%s", err)
 	}
 
 	if strings.Contains(string(content), marker) {
@@ -134,7 +134,7 @@ func AutocompleteExists() (bool, error) {
 		return true, nil
 	}
 
-	return false, fmt.Errorf("Couldn't find the rc file.")
+	return false, fmt.Errorf("couldn't find the rc file")
 }
 
 /*

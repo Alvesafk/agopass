@@ -1,3 +1,5 @@
+github.com/Alvesafk/scolor v1.2.0 h1:bY9rffkEsPm5h1nmV/2v+akCrVXmoa+skJsru+0nbSI=
+github.com/Alvesafk/scolor v1.2.0/go.mod h1:nKGIosU+LwrNPb1YKhWJyYB658bkY4E5igpI1pxu6QU=
 github.com/atotto/clipboard v0.1.4 h1:EH0zSVneZPSuFR11BlR9YppQTVDbh5+16AmcJi4g1z4=
 github.com/atotto/clipboard v0.1.4/go.mod h1:ZY9tmq7sm5xIbd9bOK4onWV4S6X0u6GY7Vn0Yu86PYI=
 github.com/dustin/go-humanize v1.0.1 h1:GzkhY7T5VNhEkwH0PVJgjz+fX1rhBrR7pRT3mDkpeCY=

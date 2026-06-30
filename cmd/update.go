@@ -10,8 +10,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Alvesafk/agopass/color"
 	"github.com/Alvesafk/agopass/storage"
+	"github.com/Alvesafk/scolor"
+	"github.com/Alvesafk/scolor/ansi"
 	"github.com/peterh/liner"
 )
 
@@ -42,10 +43,10 @@ func Update(db storage.DB, args []string) {
 		}
 
 		// Prompts the user with the return value of the CheckArgumentSpelling function.
-		fmt.Printf(color.Yellow("Wasn't able to retrieve a exact match, did you mean %s? y/N : ", "bold", 0), probable_secret.Name)
+		ansi.Yellow.FgPrintf("Wasn't able to retrieve an exact match, did you mean %s? y/N : ", probable_secret.Name)
 		response, err := reader.ReadString('\n')
 		if err != nil {
-			fmt.Print(color.Red("Wasn't able to retrieve the reponse input, aborting.", "bold", 1))
+			ansi.Red.FgPrintln("Error:", err)
 			os.Exit(1)
 		}
 
@@ -67,7 +68,7 @@ func Update(db storage.DB, args []string) {
 	}
 
 	fmt.Println("---------------~Update~----------------")
-	fmt.Printf(color.Green("Updating %s secret.", "bold", 1), to_change_secret.Name)
+	ansi.Green.FgPrintf("Updating %s secret.", to_change_secret.Name)
 
 	// Liner is so we can print the Name and the Key of the secret on the Stdin, that
 	// way the user can interact with it, they can just press enter and leave how it
@@ -100,7 +101,7 @@ func Update(db storage.DB, args []string) {
 	fmt.Print("Are you sure you want to make this changes? y/N : ")
 	response, err := reader.ReadString('\n')
 	if err != nil {
-		fmt.Print(color.Red("Wasn't able to retrieve the reponse input, aborting.", "bold", 1))
+		ansi.Red.FgPrintln("Error:", err)
 		os.Exit(1)
 		return
 	}
@@ -117,13 +118,13 @@ func Update(db storage.DB, args []string) {
 			return
 		}
 
-		fmt.Print(color.Green("Secret was updated on DB.", "bold", 1))
+		ansi.Green.FgPrintln("Secret was updated on DB.")
 		os.Exit(0)
 		return
 	// If they are not sure the program is finished, maybe i will change this after,
 	// prompt the user if they want to re-change.
 	default:
-		fmt.Printf(color.AddMod("Ok! Not updating the %s secret. Exiting.", "bold"), to_change_secret.Name)
+		fmt.Printf(scolor.AddMod("Ok! Not updating the %s secret. Exiting.", scolor.Bold))
 		os.Exit(0)
 		return
 	}
