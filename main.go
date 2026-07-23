@@ -69,7 +69,7 @@ func main() {
 	case "Version", "version", "V", "v":
 		cmd.Version()
 	case "Make", "make", "M", "m":
-		cmd.Make()
+		cmd.Make(args)
 	case "Auto", "auto", "Au", "au":
 		if err = cmd.InitAutocomplete(); err != nil {
 			fmt.Println("Error: ", err)

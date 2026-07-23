@@ -23,14 +23,14 @@ const (
 // Prints the agopass usage.
 func PrintUsage(args []string) {
 	fmt.Println("Usage instructions:")
-	fmt.Printf("%s <COMMAND> [ARG-IF-NEEDED]\n", args[0])
+	fmt.Printf("%s <COMMAND> [ARG]\n", args[0])
 	fmt.Println("Init / init / I / i     :: Create DB and prompt for master key.")
 	fmt.Println("Add / add / A / a       :: Create a secret in DB.")
 	fmt.Println("List / list / L / l     :: List all registered secrets.")
 	fmt.Println("Delete / delete / D / d :: Delete a secret.")
 	fmt.Println("Get / get / G / g       :: Get the secret key.")
 	fmt.Println("Update / update / U / u :: Modify a registered secret.")
-	fmt.Println("Make / make / M / m     :: Create a random 32 bit key.")
+	fmt.Println("Make / make / M / m     :: Create a random N bit key, pass a number to N,\n                        :: if not it defaults to 16.")
 	fmt.Println("Auto / auto / Au / au   :: Setup autocomplete.")
 }
 
