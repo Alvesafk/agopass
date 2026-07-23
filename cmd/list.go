@@ -6,11 +6,12 @@ authenticate before using it.
 package cmd
 
 import (
-	"fmt"
 	"math"
+	"os"
 
 	"github.com/Alvesafk/agopass/storage"
 	"github.com/Alvesafk/scolor/ansi"
+	"github.com/jedib0t/go-pretty/v6/table"
 )
 
 // List function, accepts a DB connection.
@@ -29,14 +30,19 @@ func List(db storage.DB) {
 		return
 	}
 
-	fmt.Println("---------------~Secrets~---------------")
+	t := table.NewWriter()
+	t.SetOutputMirror(os.Stdout)
+
+	t.SetStyle(table.StyleLight)
+
+	t.AppendHeader(table.Row{"Secrets", "Name", "Key"})
 
 	// Range over the slice of secrets, printing them into your terminal.
-	for _, v := range all_secrets {
-		fmt.Printf("Name: %s\n", v.Name)
-		fmt.Printf("Key:  %s\n", hidePassword(v.Key_Length))
-		fmt.Println("---------------------------------------")
+	for i, v := range all_secrets {
+		t.AppendRow(table.Row{i + 1, v.Name, hidePassword(v.Key_Length)})
 	}
+
+	t.Render()
 }
 
 // hide password function accepts a integer representing the length of the password, the
