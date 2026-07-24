@@ -67,7 +67,7 @@ func Get(db storage.DB, args []string) {
 		os.Exit(1)
 	}
 
-	ansi.Green.FgPrintf("Success! $s key is in your clipboard.\n", to_get_secret.Name)
+	ansi.Green.FgPrintf("Success! %s key is in your clipboard.\n", to_get_secret.Name)
 }
 
 /*
